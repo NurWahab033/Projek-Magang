@@ -74,4 +74,15 @@ class User extends Authenticatable
     {
         $this->update(['role' => self::ROLE_PESERTA]);
     }
+
+    public function detailuser()
+{
+    return $this->hasOne(DetailUser::class, 'user_id');
+}
+    public function formulirPendaftaran()
+{
+    return $this->hasOne(FormulirPendaftaran::class, 'user_id', 'id');
+}
+
+
 }

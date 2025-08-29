@@ -27,13 +27,14 @@
   </div>
 
   <!-- Navbar -->
+  <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-left">
-      <a href="/sertifikasi" class="navbar-link">Sertifikasi Peserta</a>
+      <a href="/formpendaftaranpeserta" class="navbar-link">Formulir Pendaftaran</a>
     </div>
     <div class="navbar-right">
-      <a href="/detailpesertapic" class="navbar-link">Informasi dan Penilaian Peserta</a>
-      <a href="/pic" class="navbar-link">Kembali</a>
+      <a href="/informasi" class="navbar-link">Informasi Pendaftaran</a>
+      <a href="/user" class="navbar-link">Kembali</a>
     </div>
   </div>
 
@@ -124,7 +125,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Unggah surat Permohonan PKL</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Unggah surat Permohonan PKL <b>(Format File Pdf maks 2MB)</b></label>
           <input type="file" name="file_surat" class="block w-full text-sm text-gray-500" required>
         </div>
 
@@ -139,17 +140,25 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script>
-    function toggleMahasiswaFields() {
-      const mahasiswaFields = document.getElementById("mahasiswa-fields");
-      const gradeMahasiswa = document.querySelector('input[name="grade"][value="Mahasiswa"]');
-      if (gradeMahasiswa.checked) {
+<script>
+function toggleMahasiswaFields() {
+    const mahasiswaFields = document.getElementById("mahasiswa-fields");
+    const gradeMahasiswa = document.querySelector('input[name="grade"][value="Mahasiswa"]');
+    
+    const inputs = mahasiswaFields.querySelectorAll('input, select');
+
+    if (gradeMahasiswa.checked) {
         mahasiswaFields.classList.remove("hidden");
-      } else {
+        // Aktifkan required hanya saat Mahasiswa
+        inputs.forEach(input => input.required = true);
+    } else {
         mahasiswaFields.classList.add("hidden");
-      }
+        // Nonaktifkan required saat Siswa
+        inputs.forEach(input => input.required = false);
     }
-  </script>
+}
+</script>
+
 
   @if(session('success'))
   <script>

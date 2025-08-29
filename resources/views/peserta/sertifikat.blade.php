@@ -198,10 +198,9 @@
     <img src="images/Logo IHC 1.png" alt="Watermark" class="watermark">
     
     <img src="images/cipta nirmala.png" alt="Logo Kiri" class="logo-left">
-    <img src="images/Logo IHC.png" alt="Logo Kanan" class="logo-right">
 
         <div class="judul">SERTIFIKAT</div>
-        <div class="nomor">No 0244/KP.02.02/90006/03.2025</div>
+        <div class="nomor">No 00244/KP.02.02/90006/03.2025</div>
 
         <div class="isi">Diberikan kepada :</div>
         <div class="penerima"><b>FEBRI AZIMI ALFIRMANSYAH</b></div>

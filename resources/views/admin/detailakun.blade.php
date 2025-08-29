@@ -5,54 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Detail Peserta Magang - PT. CIPTA NIRMALA</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/detailakun.css">
 
-  <style>
-    /* ==== STYLE KHUSUS MODAL ==== */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    .modal.active { display: flex; }
-    .modal-box {
-      background: #fff;
-      border-radius: 12px;
-      padding: 25px;
-      width: 100%;
-      max-width: 650px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .modal-box input,
-    .modal-box select,
-    .modal-box textarea {
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      padding: 8px 10px;
-      width: 100%;
-      font-size: 0.95rem;
-    }
-    .modal-box input:focus,
-    .modal-box select:focus,
-    .modal-box textarea:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-    }
-  </style>
 </head>
 <body class="bg-gray-50 text-sm">
 
@@ -67,11 +21,12 @@
   <!-- Navbar Utama -->
   <div class="navbar">
     <div class="navbar-left">
-      <a href="/detail" class="navbar-link"> Detail Peserta Magang</a>
+      <a href="/detailakun" class="navbar-link"> Pendaftaran Akun Peserta dan PIC</a>
     </div>
     <div class="navbar-right">
       <a href="/monitoring" class="navbar-link">Monitoring Peserta Magang</a>
       <a href="/verifikasi" class="navbar-link">Verifikasi Peserta Magang</a>
+      <a href="/sertifikasi" class="navbar-link">Sertifikasi Peserta Magang</a>
       <a href="/admin" class="navbar-link">Kembali</a>
     </div>
   </div>
@@ -273,128 +228,49 @@
     </div>
   </div>
 
-  {{-- Reset Password Modal Peserta --}} 
-<form id="formResetPassPeserta" class="modal">
-  <div class="mb-3">
-    <label>Email</label>
-    <input type="email" id="resetEmail" name="email" readonly class="border px-2 py-1 w-full">
+    <!-- ========== Modal Reset Password Peserta ========== -->
+  <div id="resetpasspeserta" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold mb-4">Reset Password Peserta</h3>
+      <form id="formResetPassPeserta">
+        <div class="mb-3">
+          <label class="block font-semibold">Email</label>
+          <input type="email" id="resetEmail" name="email" readonly class="border px-2 py-1 w-full">
+        </div>
+        <div class="mb-3">
+          <label class="block font-semibold">Password Baru</label>
+          <input type="password" id="resetPassword" name="password" required class="border px-2 py-1 w-full">
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('resetpasspeserta')" class="bg-gray-400 text-white px-4 py-2 rounded">Batal</button>
+          <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Simpan</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div class="mb-3">
-    <label>Password Baru</label>
-    <input type="password" id="resetPassword" name="password" required class="border px-2 py-1 w-full">
-  </div>
-  <div class="flex justify-end gap-2">
-    <button type="button" onclick="closeModal('resetpasspeserta')" class="bg-gray-400 px-3 py-1 rounded">Batal</button>
-    <button type="submit" class="bg-purple-600 text-white px-3 py-1 rounded">Simpan</button>
-  </div>
-</form>
 
-
+  <!-- ========== Modal Reset Password PIC ========== -->
+  <div id="resetpasspic" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold mb-4">Reset Password PIC</h3>
+      <form id="formResetPassPic">
+        <div class="mb-3">
+          <label class="block font-semibold">Email</label>
+          <input type="email" id="resetEmailPic" name="email" readonly class="border px-2 py-1 w-full">
+        </div>
+        <div class="mb-3">
+          <label class="block font-semibold">Password Baru</label>
+          <input type="password" id="resetPasswordPic" name="password" required class="border px-2 py-1 w-full">
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('resetpasspic')" class="bg-gray-400 text-white px-4 py-2 rounded">Batal</button>
+          <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- SCRIPT -->
-  <script>
-    function openTab(tab) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('content-' + tab).classList.remove('hidden');
-
-      document.querySelectorAll('#tabs button').forEach(btn => {
-        btn.classList.remove('text-purple-600','border-purple-600','text-green-600','border-green-600','border-b-2');
-        btn.classList.add('text-gray-500');
-      });
-      if (tab === 'peserta') {
-        document.getElementById('tab-peserta').classList.add('text-purple-600','border-b-2','border-purple-600');
-      } else {
-        document.getElementById('tab-pic').classList.add('text-green-600','border-b-2','border-green-600');
-      }
-    }
-
-    function openModal(id) { document.getElementById(id).classList.add("active"); }
-    function closeModal(id) { document.getElementById(id).classList.remove("active"); }
-
-    function toggleMahasiswaFields() {
-      const mahasiswaFields = document.getElementById("mahasiswa-fields");
-      const gradeMahasiswa = document.querySelector('input[name="grade"][value="Mahasiswa"]');
-      if (gradeMahasiswa.checked) {
-        mahasiswaFields.classList.remove("hidden");
-      } else {
-        mahasiswaFields.classList.add("hidden");
-      }
-    }
-
-    // Tambah akun peserta ke tabel
-    document.getElementById("formAkunPeserta").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const nama = this.nama.value;
-      const email = this.email.value;
-      const password = this.password.value;
-      const institusi = this.institusi.value;
-
-      const tbody = document.querySelector("#pesertaTable tbody");
-      const row = `<tr>
-        <td class="border px-4 py-2">${nama}</td>
-        <td class="border px-4 py-2">${email}</td>
-        <td class="border px-4 py-2">${password}</td>
-        <td class="border px-4 py-2">${institusi}</td>
-        <td class="border px-4 py-2 text-center">
-          <button onclick="openModal('formulirPesertaModal')" class="bg-purple-600 text-white px-3 py-1 rounded">Tambah Formulir</button>
-        </td>
-        <td class="border px-4 py-2 text-center">
-          <button onclick="openResetPasswordModal('${email}')" class="bg-purple-600 text-white px-3 py-1 rounded">Reset Password</button>
-        </td>
-      </tr>`;
-      tbody.insertAdjacentHTML("beforeend", row);
-      closeModal('formAkunPesertaModal');
-      this.reset();
-    });
-
-
-        function openResetPasswordModal(email) {
-      document.getElementById("resetEmail").value = email;
-      openModal('resetpasspeserta');
-    }
-
-    // Simpan perubahan password
-    document.getElementById("formResetPassPeserta").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const email = document.getElementById("resetEmail").value;
-      const newPass = document.getElementById("resetPassword").value;
-
-      const rows = document.querySelector("#pesertaTable tbody").rows;
-      for (let i = 0; i < rows.length; i++) {
-        if (rows[i].cells[1].innerText === email) {  // kolom email ada di index ke-1
-          rows[i].cells[2].innerText = newPass;     // kolom password ada di index ke-2
-          break;
-        }
-      }
-
-      closeModal('resetpasspeserta');
-      this.reset();
-    });
-
-
-    // Tambah akun PIC ke tabel
-    document.getElementById("formAkunPic").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const nama = this.nama.value;
-      const email = this.email.value;
-      const password = this.password.value;
-      const divisi = this.divisi.value;
-
-      const tbody = document.querySelector("#picTable tbody");
-      const row = `<tr>
-          <td class="border px-4 py-2">${nama}</td>
-          <td class="border px-4 py-2">${email}</td>
-          <td class="border px-4 py-2">${password}</td>
-          <td class="border px-4 py-2">${divisi}</td>
-          <td class="border px-4 py-2 text-center">
-            <button class="bg-green-600 text-white px-3 py-1 rounded">Ganti Password</button>
-          </td>
-        </tr>`;
-      tbody.insertAdjacentHTML("beforeend", row);
-      closeModal('formAkunPicModal');
-      this.reset();
-    });
-
-  </script>
+  <script src="js/detailakun.js"></script>
 </body>
 </html>

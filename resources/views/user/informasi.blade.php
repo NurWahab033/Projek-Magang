@@ -40,6 +40,8 @@
       <th class="border px-3 py-2">Tanggal Mulai</th>
       <th class="border px-3 py-2">Tanggal Selesai</th>
       <th class="border px-3 py-2">Grade</th>
+      <th class="border px-3 py-2">Fakultas</th>
+      <th class="border px-3 py-2">Jenjang</th>
       <th class="border px-3 py-2">File Unggahan</th>
       <th class="border px-3 py-2">Status</th>
       <th class="border px-3 py-2">Keterangan</th>
@@ -57,6 +59,8 @@
         <td class="border px-3 py-2">{{ \Carbon\Carbon::parse($formulir->tanggal_mulai_magang)->format('d/m/Y') }}</td>
         <td class="border px-3 py-2">{{ \Carbon\Carbon::parse($formulir->tanggal_selesai_magang)->format('d/m/Y') }}</td>
         <td class="border px-3 py-2">{{ $formulir->grade }}</td>
+        <td class="border px-3 py-2">{{ $formulir->fakultas }}</td>
+        <td class="border px-3 py-2">{{ $formulir->jenjang }}</td>
         <td class="border px-3 py-2">
             <a href="{{ asset('storage/' . $formulir->file_surat) }}" target="_blank" class="text-blue-600 underline hover:text-blue-800">
                 {{ basename($formulir->file_surat) }}

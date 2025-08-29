@@ -5,6 +5,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FormulirPendaftaranController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LaporanHarianController;
+use App\Http\Controllers\DetailUserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +18,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //form register
 // Route::get('/register', function () {
@@ -34,8 +37,18 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/formpendaftaran/{id}/status', [AdminController::class, 'updateStatus'])
     ->name('formpendaftaran.updateStatus');
     Route::get('/verifikasi',[AdminController::class, 'index']);
+    Route::post('/update-photo', [App\Http\Controllers\DetailUserController::class, 'updatePhoto'])->name('updatePhoto');
+
 });
 
+//Laporan Harian
+Route::middleware(['auth'])->group(function () {
+    Route::get('/laporan', [LaporanHarianController::class, 'index'])->name('laporan.index');
+    Route::post('/laporan', [LaporanHarianController::class, 'store'])->name('laporan.store');
+    Route::get('/laporan/{id}', [LaporanHarianController::class, 'show'])->name('laporan.show');
+    Route::put('/laporan/{id}', [LaporanHarianController::class, 'update'])->name('laporan.update');
+    Route::delete('/laporan/{id}', [LaporanHarianController::class, 'destroy'])->name('laporan.destroy');
+});
 //form forgot pass
 Route::get('/forgotpassword', function () {
     return view('kredensial/resetpass');
@@ -47,6 +60,9 @@ Route::get('/user', function () {
     return view('user/lamanuser');
 });
 
+Route::get('/formpendaftaranpeserta', function () {
+    return view('user/formpendaftaran');
+});
 // // form peserta magang
 // Route::get('/formpendaftaran', function () {
 //     return view('user/magangform');
@@ -56,12 +72,16 @@ Route::get('/user', function () {
 // Route::get('/informasi', function () {
 //     return view('user/informasi');
 // });
-Route::get('/informasi', [FormulirPendaftaranController::class, 'informasi'])->middleware('auth');
+Route::get('/informasi', [AdminController::class, 'informasi'])->middleware('auth');
 
 //ADMIN
 //laman admin
 Route::get('/admin', function () {
     return view('admin/lamanadmin');
+});
+
+Route::get('/sertifikasi', function () {
+    return view('admin/sertifikasipeserta');
 });
 
 //form verifikasi peserta
@@ -70,8 +90,8 @@ Route::get('/admin', function () {
 // });
 
 //form detail peserta
-Route::get('/detail', function () {
-    return view('admin/detailpeserta');
+Route::get('/detailakun', function () {
+    return view('admin/detailakun');
 });
 
 //form monitoring peserta
@@ -96,9 +116,9 @@ Route::get('/Presensi-Peserta', function () {
 });
 
 //Laporan Harian
-Route::get('/Laporan-Harian', function () {
-    return view('peserta/laporanharian');
-});
+// Route::get('/Laporan-Harian', function () {
+//     return view('peserta/laporanharian');
+// });
 
 //Laporan Akhir
 Route::get('/Laporan-Akhir', function () {
@@ -127,6 +147,4 @@ Route::get('/detailpesertapic', function () {
     return view('PIC/detailpeserta_pic');
 });
 
-Route::get('/sertifikasi', function () {
-    return view('PIC/sertifikasipeserta');
-});
+

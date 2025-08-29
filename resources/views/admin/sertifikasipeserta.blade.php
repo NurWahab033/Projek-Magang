@@ -21,11 +21,13 @@
   <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-left">
-      <a href="/sertifikasi" class="navbar-link"> Sertifikasi Peserta Magang</a>
+      <a href="/sertifikasi" class="navbar-link"> Sertifikasi Peserta</a>
     </div>
     <div class="navbar-right">
-      <a href="/detailpesertapic" class="navbar-link">Informasi dan Penilaian Peserta</a>
-      <a href="/pic" class="navbar-link">Kembali</a>
+      <a href="/detailakun" class="navbar-link">Pendaftaran Akun Peserta & PIC</a>
+      <a href="/monitoring" class="navbar-link">Monitoring Peserta Magang</a>
+      <a href="/verifikasi" class="navbar-link">Verifikasi Peserta Magang</a>
+      <a href="/admin" class="navbar-link">Kembali</a>
     </div>
   </div>
 

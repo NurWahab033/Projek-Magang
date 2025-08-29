@@ -22,6 +22,8 @@ class FormulirPendaftaran extends Model
         'tanggal_mulai_magang',
         'tanggal_selesai_magang',
         'grade',
+        'fakultas',
+        'jenjang',
         'file_surat',
         'status',
         'alasan',

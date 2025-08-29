@@ -5,6 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Laporan Akhir Peserta</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 500px;
+    }
+    .modal-content h3 {
+      margin-top: 0;
+    }
+    .close {
+      float: right;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
@@ -41,13 +70,22 @@
           <th>Jam</th>
           <th>Status</th>
           <th>Detail Pengumpulan</th>
-          <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
         <!-- Baris laporan akan diisi lewat JavaScript -->
       </tbody>
     </table>
+  </div>
+
+  <!-- Modal -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3 id="modalJudul"></h3>
+      <p><b>File Laporan:</b> <span id="modalFileLaporan"></span></p>
+      <p><b>File Dokumen (PPT):</b> <span id="modalFileDokumen"></span></p>
+    </div>
   </div>
 
   <script>
@@ -87,32 +125,31 @@
           <td>${laporan.jam}</td>
           <td>${laporan.status}</td>
           <td>
-            <a href="#" onclick="alert(
-              'Judul: ${laporan.judulLaporan}\\n' +
-              'File Laporan: ${laporan.fileLaporan}\\n' +
-              'File Dokumen: ${laporan.fileDokumen}\\n' +
-              'Jam: ${laporan.jam}'
-            )">
-              Lihat Detail
-            </a>
-          </td>
-          <td>
-            <a href="#" onclick="editLaporan(${index})">Edit Pengajuan</a> | 
-            <a href="#" onclick="hapusLaporan(${index})">Hapus Pengajuan</a>
+            <a href="#" onclick="showDetail(${index})">Lihat Detail</a>
           </td>
         `;
         tableBody.appendChild(row);
       });
     }
 
-    function editLaporan(index) {
-      alert('Edit tidak tersedia karena tidak ada input teks. Hapus dan unggah ulang jika perlu.');
+    function showDetail(index) {
+      const laporan = laporanList[index];
+      document.getElementById('modalJudul').textContent = laporan.judulLaporan;
+      document.getElementById('modalFileLaporan').textContent = laporan.fileLaporan || '-';
+      document.getElementById('modalFileDokumen').textContent = laporan.fileDokumen || '-';
+
+      document.getElementById('detailModal').style.display = 'block';
     }
 
-    function hapusLaporan(index) {
-      if (confirm("Yakin ingin menghapus pengajuan ini?")) {
-        laporanList.splice(index, 1);
-        updateTable();
+    function closeModal() {
+      document.getElementById('detailModal').style.display = 'none';
+    }
+
+    // Tutup modal jika klik di luar konten
+    window.onclick = function(event) {
+      const modal = document.getElementById('detailModal');
+      if (event.target == modal) {
+        modal.style.display = "none";
       }
     }
   </script>

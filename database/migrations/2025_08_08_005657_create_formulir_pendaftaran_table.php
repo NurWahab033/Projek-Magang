@@ -23,6 +23,8 @@ Schema::create('formulir_pendaftaran', function (Blueprint $table) {
     $table->date('tanggal_mulai_magang');
     $table->date('tanggal_selesai_magang');
     $table->enum('grade', ['Mahasiswa', 'Siswa']);
+        $table->string('fakultas')->nullable(); 
+    $table->enum('jenjang', ['S1', 'S2'])->nullable(); 
     $table->string('file_surat'); 
     $table->enum('status', ['menunggu', 'diterima', 'ditolak'])->default('menunggu');
     $table->string('alasan', 255)->nullable();
