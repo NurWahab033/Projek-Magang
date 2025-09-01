@@ -6,7 +6,6 @@
   <title>Detail Peserta Magang - PT. CIPTA NIRMALA</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="/css/detailakun.css">
-
 </head>
 <body class="bg-gray-50 text-sm">
 
@@ -34,11 +33,11 @@
   <!-- Tabs -->
   <div class="border-b border-gray-200 mt-10 px-6">
     <nav class="flex space-x-6" id="tabs">
-      <button onclick="openTab('peserta')" id="tab-peserta" 
+      <button onclick="openTab('peserta')" id="tab-peserta"
         class="py-2 px-4 font-semibold text-purple-600 border-b-2 border-purple-600 focus:outline-none">
         Peserta
       </button>
-      <button onclick="openTab('pic')" id="tab-pic" 
+      <button onclick="openTab('pic')" id="tab-pic"
         class="py-2 px-4 font-semibold text-gray-500 hover:text-green-600 focus:outline-none">
         PIC
       </button>
@@ -88,7 +87,22 @@
           <th class="border px-4 py-2">Aksi</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        @foreach($pics as $pic)
+          <tr>
+            <td class="border px-4 py-2">{{ $pic->username }}</td>
+            <td class="border px-4 py-2">{{ $pic->email }}</td>
+            <td class="border px-4 py-2">********</td>
+            <td class="border px-4 py-2">{{ $pic->nama_institusi }}</td>
+            <td class="border px-4 py-2">
+              <button onclick="openModal('resetpasspic'); document.getElementById('resetEmailPic').value='{{ $pic->email }}'"
+                class="bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700">
+                Reset Password
+              </button>
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
     </table>
   </section>
 
@@ -97,6 +111,7 @@
     <div class="modal-box">
       <h3 class="text-lg font-bold mb-4">Tambah Akun Peserta</h3>
       <form id="formAkunPeserta">
+        @csrf
         <div class="mb-3">
           <label class="block font-semibold">Nama</label>
           <input type="text" name="nama" required>
@@ -125,7 +140,8 @@
   <div id="formAkunPicModal" class="modal">
     <div class="modal-box">
       <h3 class="text-lg font-bold mb-4">Tambah Akun PIC</h3>
-      <form id="formAkunPic">
+      <form id="formAkunPic" method="POST" action="{{ route('storePic') }}">
+        @csrf
         <div class="mb-3">
           <label class="block font-semibold">Nama</label>
           <input type="text" name="nama" required>
@@ -228,11 +244,12 @@
     </div>
   </div>
 
-    <!-- ========== Modal Reset Password Peserta ========== -->
+  <!-- ========== Modal Reset Password Peserta ========== -->
   <div id="resetpasspeserta" class="modal">
     <div class="modal-box">
       <h3 class="text-lg font-bold mb-4">Reset Password Peserta</h3>
       <form id="formResetPassPeserta">
+        @csrf
         <div class="mb-3">
           <label class="block font-semibold">Email</label>
           <input type="email" id="resetEmail" name="email" readonly class="border px-2 py-1 w-full">
@@ -253,7 +270,8 @@
   <div id="resetpasspic" class="modal">
     <div class="modal-box">
       <h3 class="text-lg font-bold mb-4">Reset Password PIC</h3>
-      <form id="formResetPassPic">
+      <form id="formResetPassPic" method="POST" action="{{ route('resetPasswordPic') }}">
+        @csrf
         <div class="mb-3">
           <label class="block font-semibold">Email</label>
           <input type="email" id="resetEmailPic" name="email" readonly class="border px-2 py-1 w-full">
@@ -274,3 +292,5 @@
   <script src="js/detailakun.js"></script>
 </body>
 </html>
+
+
