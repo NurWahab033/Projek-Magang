@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FormulirPendaftaranController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LaporanHarianController;
+use App\Http\Controllers\CheckClockController;
 use App\Http\Controllers\DetailUserController;
 
 Route::get('/', function () {
@@ -32,13 +33,24 @@ Route::post('/register', [RegisterController::class, 'register']);
 // Route::post('/formulir', [FormulirPendaftaranController::class, 'store']);
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/presensi', [CheckClockController::class, 'index'])->name('checkclock.index');
+    Route::post('/presensi', [CheckClockController::class, 'store'])->name('checkclock.store');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/detailakun', [AdminController::class, 'detailAkun'])->name('detailAkun');
+    Route::get('/create-pic', [AdminController::class, 'createPic'])->name('createPic');
+    Route::post('/store-pic', [AdminController::class, 'storePic'])->name('storePic');
+    Route::post('/reset-password-pic', [AdminController::class, 'resetPasswordPic'])->name('resetPasswordPic');
+});
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/formpendaftaran', [FormulirPendaftaranController::class, 'create'])->name('formulir.create');
     Route::post('/formpendaftaran', [FormulirPendaftaranController::class, 'store'])->name('formulir.store');
     Route::put('/formpendaftaran/{id}/status', [AdminController::class, 'updateStatus'])
-    ->name('formpendaftaran.updateStatus');
-    Route::get('/verifikasi',[AdminController::class, 'index']);
+        ->name('formpendaftaran.updateStatus');
+    Route::get('/verifikasi', [AdminController::class, 'index']);
     Route::post('/update-photo', [App\Http\Controllers\DetailUserController::class, 'updatePhoto'])->name('updatePhoto');
-
 });
 
 //Laporan Harian
@@ -90,9 +102,9 @@ Route::get('/sertifikasi', function () {
 // });
 
 //form detail peserta
-Route::get('/detailakun', function () {
-    return view('admin/detailakun');
-});
+// Route::get('/detailakun', function () {
+//     return view('admin/detailakun');
+// });
 
 //form monitoring peserta
 Route::get('/monitoring', function () {
@@ -111,9 +123,9 @@ Route::get('/edit_profile', function () {
 });
 
 //Presensi
-Route::get('/Presensi-Peserta', function () {
-    return view('peserta/presensipeserta');
-});
+// Route::get('/Presensi-Peserta', function () {
+//     return view('peserta/presensipeserta');
+// });
 
 //Laporan Harian
 // Route::get('/Laporan-Harian', function () {
@@ -137,6 +149,7 @@ Route::get('/sertif', function () {
 
 //Laman PIC
 use App\Http\Controllers\PenilaianController;
+
 Route::get('/penilaian', function () {
     return view('PIC/penilaian');
 });
@@ -148,5 +161,3 @@ Route::get('/pic', function () {
 Route::get('/detailpesertapic', function () {
     return view('PIC/detailpeserta_pic');
 });
-
-

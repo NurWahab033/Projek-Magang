@@ -52,11 +52,11 @@
   </style>
 </head>
 <body class="bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 font-sans min-h-screen">
-  
+
   <!-- Header -->
 <header class="bg-white/70 backdrop-blur-lg shadow-md sticky top-0 z-40 animate__animated animate__fadeInDown">
   <div class="max-w-7xl mx-auto flex items-center justify-between p-4">
-    
+
     <!-- Logo + Nama Perusahaan -->
     <div class="flex items-center space-x-4">
       <img src="/images/cipta nirmala.png" alt="Logo" class="w-14 h-14 object-contain rounded-lg shadow-sm animate__animated animate__zoomIn">
@@ -73,12 +73,12 @@
       </span>
 
       <!-- Tombol Foto Profil -->
-      <button id="userMenuButton" type="button" 
+      <button id="userMenuButton" type="button"
         class="w-11 h-11 flex items-center justify-center rounded-full overflow-hidden border-2 border-cyan-400 hover:scale-110 transition-transform duration-200 shadow-md">
         <img id="headerProfileImage"
-            src="{{ Auth::user()->detailuser && Auth::user()->detailuser->foto_profil 
-                      ? asset('storage/' . Auth::user()->detailuser->foto_profil) 
-                      : '/images/default profile.png' }}" 
+            src="{{ Auth::user()->detailuser && Auth::user()->detailuser->foto_profil
+                      ? asset('storage/' . Auth::user()->detailuser->foto_profil)
+                      : '/images/default profile.png' }}"
             alt="User" class="w-full h-full object-cover">
       </button>
 
@@ -101,7 +101,7 @@
   <!-- Konten Card -->
 <main class="mt-20 px-6">
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-12">
-    
+
     <!-- Gambar Kiri -->
     <div class="flex-shrink-0 w-full md:w-2/5 flex justify-center">
       <img src="/images/iv2.png" alt="Ilustrasi Peserta" class="max-w-sm md:max-w-md float animate__animated animate__fadeInLeft">
@@ -109,18 +109,19 @@
 
     <!-- Card Kanan -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full md:w-3/5">
-      
-      <a href="/Presensi-Peserta" class="card-menu group animate__animated animate__fadeInUp animate__faster">
+
+    <a href="{{ route('checkclock.index') }}" class="card-menu group animate__animated animate__fadeInUp animate__faster">
         <div class="icon-wrapper bg-cyan-100 text-cyan-600">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8" viewBox="0 0 24 24">
-            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
-          </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8" viewBox="0 0 24 24">
+                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+            </svg>
         </div>
         <div class="ml-5 flex-1">
-          <h2 class="title">Daftar Hadir</h2>
-          <p class="subtitle">Isi daftar hadir harian Anda di sini</p>
+            <h2 class="title">Daftar Hadir</h2>
+            <p class="subtitle">Isi daftar hadir harian Anda di sini</p>
         </div>
-      </a>
+    </a>
+
 
       <a href="/laporan" class="card-menu group animate__animated animate__fadeInUp animate__delay-1s animate__faster">
         <div class="icon-wrapper bg-green-100 text-green-600">
@@ -167,15 +168,15 @@
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative animate-fade-in">
     <button id="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
     <h2 class="text-xl font-bold mb-6 text-center text-gray-800">Edit Profil</h2>
-    
+
     <!-- Form Update -->
     <form id="updatePhotoForm" action="{{ route('updatePhoto') }}" method="POST" enctype="multipart/form-data">
       @csrf
-    
+
       <div class="flex justify-center mb-6 relative">
         <img id="modalProfileImage"
-            src="{{ Auth::user()->detailuser && Auth::user()->detailuser->foto_profil 
-                      ? asset('storage/' . Auth::user()->detailuser->foto_profil) 
+            src="{{ Auth::user()->detailuser && Auth::user()->detailuser->foto_profil
+                      ? asset('storage/' . Auth::user()->detailuser->foto_profil)
                       : 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' }}"
             class="w-28 h-28 rounded-full border-4 border-cyan-300 shadow-md object-cover animate__animated animate__zoomIn">
 
