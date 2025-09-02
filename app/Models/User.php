@@ -76,13 +76,16 @@ class User extends Authenticatable
     }
 
     public function detailuser()
-{
-    return $this->hasOne(DetailUser::class, 'user_id');
-}
+    {
+        return $this->hasOne(DetailUser::class, 'user_id');
+    }
     public function formulirPendaftaran()
-{
-    return $this->hasOne(FormulirPendaftaran::class, 'user_id', 'id');
-}
+    {
+        return $this->hasOne(FormulirPendaftaran::class, 'user_id', 'id');
+    }
 
-
+    public function checkClocks()
+    {
+        return $this->hasMany(CheckClock::class, 'user_id');
+    }
 }
