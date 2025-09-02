@@ -124,6 +124,8 @@ Route::get('/Presensi-Peserta', function () {
 Route::get('/Laporan-Akhir', function () {
     return view('peserta/laporanakhir');
 });
+use App\Http\Controllers\LaporanAkhirController;
+
 
 Route::get('/sertifikat', function () {
     return view('peserta/cetaksertifikat');
