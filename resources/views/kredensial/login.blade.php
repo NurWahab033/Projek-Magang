@@ -33,6 +33,27 @@
       <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center">Selamat Datang</h1>
       <p class="text-gray-600 text-center mb-6">Silakan login untuk melanjutkan ke sistem magang.</p>
 
+      <!-- Alert sukses -->
+      @if(session('success'))
+        <div class="mb-4 p-3 rounded-xl bg-green-100 border border-green-300 text-green-700 text-sm text-center">
+          {{ session('success') }}
+        </div>
+      @endif
+
+      <!-- Alert error -->
+      @if(session('error'))
+        <div class="mb-4 p-3 rounded-xl bg-red-100 border border-red-300 text-red-700 text-sm text-center">
+          {{ session('error') }}
+        </div>
+      @endif
+
+      <!-- Validasi error -->
+      @if ($errors->any())
+        <div class="mb-4 p-3 rounded-xl bg-red-100 border border-red-300 text-red-700 text-sm text-center">
+          {{ $errors->first() }}
+        </div>
+      @endif
+
       <form action="/login" method="POST" class="space-y-4">
         @csrf
         <input type="text" name="email" placeholder="Email" required 

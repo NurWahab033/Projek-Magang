@@ -20,7 +20,7 @@ class LaporanAkhirController extends Controller
             ->latest()
             ->get();
 
-        return view('peserta.laporan-akhir', compact('laporans'));
+        return view('peserta.laporanakhir', compact('laporans'));
     }
 
     /**
@@ -29,7 +29,7 @@ class LaporanAkhirController extends Controller
     public function store(StoreLaporanAkhirRequest $request)
     {
         $user = Auth::user();
-        $dir  = "laporan-akhir/{$user->id}";
+        $dir  = "laporanakhir/{$user->id}";
 
         // Simpan file PDF
         $pdfFile = $request->file('fileLaporan');
@@ -51,8 +51,8 @@ class LaporanAkhirController extends Controller
         ]);
 
         return redirect()
-            ->route('laporan-akhir.index')
-            ->with('success', 'Laporan akhir berhasil diunggah.');
+            ->route('Laporan-Akhir.index')
+            ->with('success', 'Laporan berhasil diunggah.');
     }
 
     /**

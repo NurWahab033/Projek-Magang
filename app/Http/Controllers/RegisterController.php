@@ -23,7 +23,7 @@ class RegisterController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed|min:6',
-            'nama_institusi' => 'required|string|max:46', // jika sekolah boleh kosong
+            'nama_institusi' => 'required|string|max:46', 
         ]);
 
         // Simpan ke tabel users

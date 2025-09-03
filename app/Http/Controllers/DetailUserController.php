@@ -5,12 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DetailUser;
+use App\Models\User;
 
 class DetailUserController extends Controller
 {
     /**
      * Update foto profil user yang sedang login
      */
+
+    public function index()
+    {
+        // Ambil semua user dengan role = 4 (PIC)
+        $picUsers = User::where('role', User::ROLE_PIC)->get();
+
+        // Ambil peserta magang (role = 2) + detailuser
+        $peserta = User::with('detailuser')->where('role', User::ROLE_PESERTA)->get();
+
+        return view('admin.monitoringpeserta', compact('peserta', 'picUsers'));
+    }
     public function updatePhoto(Request $request)
     {
         $request->validate([
@@ -39,4 +51,19 @@ class DetailUserController extends Controller
 
         return back()->with('success', 'Foto profil berhasil diperbarui!');
     }
+
+        public function updateUnit(Request $request, User $user)
+        {
+            $request->validate([
+                'unit' => 'required|uuid|exists:users,id', // karena unit diisi id PIC
+            ]);
+
+            DetailUser::updateOrCreate(
+                ['user_id' => $user->id],
+                ['unit' => $request->unit]
+            );
+
+            return back()->with('success', 'Unit/PIC berhasil diperbarui.');
+        }
+
 }

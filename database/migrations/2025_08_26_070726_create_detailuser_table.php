@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('user_id'); // relasi ke users
             $table->string('foto_profil')->nullable();
-            $table->string('unit')->nullable();
+            $table->uuid('unit')->nullable();
             $table->timestamps();
 
             // foreign key

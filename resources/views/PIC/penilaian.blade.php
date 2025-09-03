@@ -15,6 +15,15 @@
       <img src="/images/cipta nirmala.png" alt="Logo" class="h-12 w-auto">
       <h1 class="text-xl font-bold text-gray-800">PT. CIPTA NIRMALA</h1>
     </div>
+
+    <!-- Tombol Logout -->
+  <form method="POST" action="/logout" class="ml-auto">
+    @csrf
+    <button type="submit" 
+            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow font-medium">
+      Logout
+    </button>
+  </form>
   </div>
 
   <!-- Konten Monitoring -->
