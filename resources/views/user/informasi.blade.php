@@ -28,6 +28,7 @@
   </div>
 </div>
 
+<div class="overflow-x-auto">
 <table class="min-w-full table-auto border border-gray-300 text-sm text-left shadow">
   <thead class="bg-gray-100 text-gray-800">
     <tr>
@@ -89,3 +90,4 @@
 </tbody>
 
 </table>
+</div>

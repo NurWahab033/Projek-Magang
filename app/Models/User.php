@@ -88,4 +88,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(CheckClock::class, 'user_id');
     }
+
+    public function penilaian()
+    {
+        return $this->hasOne(Penilaian::class, 'user_id', 'id');
+    }
+    // 🔹 Relasi ke laporan harian (1 user punya banyak laporan harian)
+    public function laporanHarian()
+    {
+        return $this->hasMany(LaporanHarian::class, 'user_id', 'id');
+    }
+
+    // 🔹 Relasi ke laporan akhir (1 user hanya punya 1 laporan akhir)
+    public function laporanAkhir()
+    {
+        return $this->hasOne(LaporanAkhir::class, 'user_id', 'id');
+    }
+
 }

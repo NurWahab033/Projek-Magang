@@ -222,6 +222,9 @@
 
           <p><strong>Jenjang</strong></p>
           <p>: {{ Auth::user()->formulirPendaftaran->jenjang ?? '-' }}</p>
+
+          <p><strong>Unit</strong></p>
+          <p>: {{ Auth::user()->formulirPendaftaran->jenjang ?? '-' }}</p>
         </div>
       </div>
 

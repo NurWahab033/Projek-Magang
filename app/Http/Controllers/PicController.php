@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Penilaian;
 
@@ -10,16 +11,32 @@ class PicController extends Controller
 {
     public function index()
     {
-        // Ambil hanya user dengan role peserta (2) beserta relasi detailuser dan formulir
-        $pesertas = User::with(['detailuser', 'formulirPendaftaran'])
-                        ->where('role', User::ROLE_PESERTA)
-                        ->get();
+        $picId = Auth::id(); // id PIC yang login (UUID)
+
+        // Tampilkan hanya peserta yang detailuser.unit == id PIC
+        $pesertas = User::with(['detailuser', 'formulirPendaftaran', 'penilaian'])
+            ->where('role', User::ROLE_PESERTA)
+            ->whereHas('detailuser', function ($q) use ($picId) {
+                $q->where('unit', $picId);
+            })
+            ->get();
 
         return view('PIC.penilaian', compact('pesertas'));
     }
 
-        public function storePenilaian(Request $request, $user_id)
+    public function storePenilaian(Request $request, $user_id)
     {
+        // Pastikan PIC hanya bisa menilai peserta yang "unit"-nya == id PIC
+        $authorized = User::where('id', $user_id)
+            ->whereHas('detailuser', function ($q) {
+                $q->where('unit', Auth::id());
+            })
+            ->exists();
+
+        if (! $authorized) {
+            abort(403, 'Anda tidak berhak menilai peserta ini.');
+        }
+
         $request->validate([
             'penyelesaian' => 'required|integer|min:0|max:100',
             'inisiatif'    => 'required|integer|min:0|max:100',
@@ -28,7 +45,6 @@ class PicController extends Controller
             'kedisiplinan' => 'required|integer|min:0|max:100',
         ]);
 
-        // Hitung rata-rata
         $rata_rata = (
             $request->penyelesaian +
             $request->inisiatif +
@@ -37,7 +53,6 @@ class PicController extends Controller
             $request->kedisiplinan
         ) / 5;
 
-        // Simpan atau update jika sudah ada penilaian untuk user ini
         Penilaian::updateOrCreate(
             ['user_id' => $user_id],
             [
