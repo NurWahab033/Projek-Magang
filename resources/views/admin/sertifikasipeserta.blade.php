@@ -38,16 +38,16 @@
     <!-- Search & Filter -->
     <div class="mb-4 flex flex-col md:flex-row items-center gap-3">
       <!-- Search Nama -->
-      <input 
-        type="text" 
-        id="searchInput" 
-        placeholder="Cari berdasarkan nama peserta..." 
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Cari berdasarkan nama peserta..."
         class="w-full md:w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
 
       <!-- Filter Tingkat -->
-      <select 
-        id="filterTingkat" 
+      <select
+        id="filterTingkat"
         class="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         <option value="">Semua Tingkat</option>
@@ -75,25 +75,43 @@
             <th class="px-4 py-3 border">Aksi</th>
           </tr>
         </thead>
-        <tbody id="sertifikasiTable">
-          <tr class="hover:bg-gray-50">
-            <td class="px-4 py-3 border">1</td>
-            <td class="px-4 py-3 border">Muhammad Nur Wahab</td>
-            <td class="px-4 py-3 border">Mahasiswa</td>
-            <td class="px-4 py-3 border">Universitas Muhammadiyah Gresik</td>
-            <td class="px-4 py-3 border">14/07/2025</td>
-            <td class="px-4 py-3 border">14/09/2025</td>
-            <td class="px-4 py-3 border">85</td>
-            <td class="px-4 py-3 border nomor-sertifikat">-</td>
-            <td class="px-4 py-3 border tanggal-terbit">-</td>
-            <td class="px-4 py-3 border font-semibold text-red-600 status-sertifikat">Sertifikat Belum Tersedia</td>
-            <td class="px-4 py-3 border text-center">
-              <button class="izinBtn bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition">
-                Izin Terbit Sertifikat
-              </button>
-            </td>
-          </tr>
-        </tbody>
+            <tbody id="sertifikasiTable">
+                @forelse($sertifikat as $s)
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3 border">{{ $loop->iteration }}</td>
+                    <td class="px-4 py-3 border">{{ $s->formulir->nama_lengkap }}</td>
+                    <td class="px-4 py-3 border">{{ $s->formulir->grade }}</td>
+                    <td class="px-4 py-3 border">{{ $s->formulir->nama_institusi }}</td>
+                    <td class="px-4 py-3 border">{{ \Carbon\Carbon::parse($s->formulir->tanggal_mulai_magang)->format('d/m/Y') }}</td>
+                    <td class="px-4 py-3 border">{{ \Carbon\Carbon::parse($s->formulir->tanggal_selesai_magang)->format('d/m/Y') }}</td>
+                    <td class="px-4 py-3 border">{{ $s->nilai ?? '-' }}</td>
+                    <td class="px-4 py-3 border nomor-sertifikat">{{ $s->nomor_sertifikat ?? '-' }}</td>
+                    <td class="px-4 py-3 border">
+                        {{ $s->tanggal_terbit ? \Carbon\Carbon::parse($s->tanggal_terbit)->format('d/m/Y') : '-' }}
+                    </td>
+                    <td class="px-4 py-3 border text-center">
+                        @if($s->status === 'izin terbit')
+                            <form action="{{ route('sertifikat.terbit', $s->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition">
+                                    Terbitkan
+                                </button>
+                            </form>
+                        @elseif($s->status === 'tersedia')
+                            <span class="text-gray-500">Sudah Diterbitkan</span>
+                        @else
+                            <span class="text-red-500">Belum Ada</span>
+                        @endif
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="11" class="px-4 py-3 border text-center text-gray-500">
+                        Belum ada data sertifikat.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
       </table>
     </div>
   </div>
@@ -132,9 +150,9 @@
         statusCell.classList.add("text-green-600");
 
         // Format nomor sertifikat baru
-        const nomorUrut = String(counterSertifikat).padStart(2, '0'); 
+        const nomorUrut = String(counterSertifikat).padStart(2, '0');
         nomorCell.textContent = `${nomorUrut}/KP.02.02/90006/${getMonthYear()}`;
-        
+
         tanggalCell.textContent = getToday();
         counterSertifikat++;
 

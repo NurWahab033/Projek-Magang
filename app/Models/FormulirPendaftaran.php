@@ -32,4 +32,9 @@ class FormulirPendaftaran extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function sertifikat()
+    {
+        return $this->hasOne(Sertifikat::class, 'formulir_id');
+    }
 }

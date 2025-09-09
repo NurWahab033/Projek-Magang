@@ -11,6 +11,7 @@ use App\Http\Controllers\LaporanAkhirController;
 use App\Http\Controllers\DetailUserController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\PicController;
+use App\Http\Controllers\SertifikatController;
 
 //form login
 Route::get('/login', function () {
@@ -104,3 +105,6 @@ Route::middleware(['auth', 'pic'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/update-photo', [DetailUserController::class, 'updatePhoto'])->name('updatePhoto');
 });
+
+Route::get('/sertifikasi', [SertifikatController::class, 'index'])->name('sertifikat.index');
+Route::post('/sertifikat/{id}/terbit', [SertifikatController::class, 'terbit'])->name('sertifikat.terbit');

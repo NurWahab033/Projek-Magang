@@ -105,4 +105,8 @@ class User extends Authenticatable
         return $this->hasOne(LaporanAkhir::class, 'user_id', 'id');
     }
 
+    public function sertifikat()
+    {
+        return $this->hasOne(\App\Models\Sertifikat::class, 'formulir_id', 'formulir_pendaftaran.id');
+    }
 }

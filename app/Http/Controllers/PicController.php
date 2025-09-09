@@ -25,48 +25,76 @@ class PicController extends Controller
     }
 
     public function storePenilaian(Request $request, $user_id)
-{
-    // Pastikan PIC hanya bisa menilai peserta yang "unit"-nya == id PIC
-    $authorized = User::where('id', $user_id)
-        ->whereHas('detailuser', function ($q) {
-            $q->where('unit', Auth::id());
-        })
-        ->exists();
+    {
+        // ✅ cek otorisasi PIC
+        $authorized = User::where('id', $user_id)
+            ->whereHas('detailuser', function ($q) {
+                $q->where('unit', Auth::id());
+            })
+            ->exists();
 
-    if (! $authorized) {
-        abort(403, 'Anda tidak berhak menilai peserta ini.');
+        if (! $authorized) {
+            abort(403, 'Anda tidak berhak menilai peserta ini.');
+        }
+
+        // ✅ validasi input
+        $request->validate([
+            'penyelesaian' => 'required|integer|min:0|max:100',
+            'inisiatif'    => 'required|integer|min:0|max:100',
+            'komunikasi'   => 'required|integer|min:0|max:100',
+            'kerjasama'    => 'required|integer|min:0|max:100',
+            'kedisiplinan' => 'required|integer|min:0|max:100',
+        ]);
+
+        $rata_rata = (
+            $request->penyelesaian +
+            $request->inisiatif +
+            $request->komunikasi +
+            $request->kerjasama +
+            $request->kedisiplinan
+        ) / 5;
+
+        // ✅ simpan/update penilaian
+        Penilaian::updateOrCreate(
+            ['user_id' => $user_id],
+            [
+                'penyelesaian' => $request->penyelesaian,
+                'inisiatif'    => $request->inisiatif,
+                'komunikasi'   => $request->komunikasi,
+                'kerjasama'    => $request->kerjasama,
+                'kedisiplinan' => $request->kedisiplinan,
+                'rata_rata'    => $rata_rata,
+                'tanggal_penilaian' => $request->tanggal_penilaian ?? now()->toDateString(),
+            ]
+        );
+
+        // ✅ generate sertifikat otomatis
+        $formulir = \App\Models\FormulirPendaftaran::where('user_id', $user_id)->first();
+
+        if ($formulir) {
+            $sertifikat = \App\Models\Sertifikat::firstOrNew([
+                'formulir_id' => $formulir->id,
+            ]);
+
+            if (! $sertifikat->exists) {
+                // Ambil nomor urut terakhir
+                $lastNumber = \App\Models\Sertifikat::max('id') + 1;
+                $nomorUrut = 'No' . str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
+
+                // Format bulan.tahun (misal 09.2025)
+                $monthYear = now()->format('m.Y');
+
+                // Gabungkan format nomor sertifikat
+                $nomor = $nomorUrut . '/KP.02.02/90006/' . $monthYear;
+
+                $sertifikat->nomor_sertifikat = $nomor;
+                $sertifikat->status           = 'izin terbit'; // ⬅️ tunggu tombol Terbitkan
+                $sertifikat->tanggal_terbit   = null;          // ⬅️ kosong dulu
+                $sertifikat->save();
+            }
+        }
+
+
+        return redirect()->back()->with('success', 'Penilaian berhasil disimpan dan sertifikat otomatis dibuat.');
     }
-
-    $request->validate([
-        'penyelesaian' => 'required|integer|min:0|max:100',
-        'inisiatif'    => 'required|integer|min:0|max:100',
-        'komunikasi'   => 'required|integer|min:0|max:100',
-        'kerjasama'    => 'required|integer|min:0|max:100',
-        'kedisiplinan' => 'required|integer|min:0|max:100',
-    ]);
-
-    $rata_rata = (
-        $request->penyelesaian +
-        $request->inisiatif +
-        $request->komunikasi +
-        $request->kerjasama +
-        $request->kedisiplinan
-    ) / 5;
-
-    Penilaian::updateOrCreate(
-        ['user_id' => $user_id],
-        [
-            'penyelesaian' => $request->penyelesaian,
-            'inisiatif'    => $request->inisiatif,
-            'komunikasi'   => $request->komunikasi,
-            'kerjasama'    => $request->kerjasama,
-            'kedisiplinan' => $request->kedisiplinan,
-            'rata_rata'    => $rata_rata,
-            'tanggal_penilaian' => $request->tanggal_penilaian ?? now()->toDateString(),
-        ]
-    );
-
-    return redirect()->back()->with('success', 'Penilaian berhasil disimpan.');
-}
-
 }
