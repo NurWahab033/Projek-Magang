@@ -19,6 +19,7 @@ class Penilaian extends Model
         'kerjasama',
         'kedisiplinan',
         'rata_rata',
+        'tanggal_penilaian',
     ];
 
     // Relasi ke User

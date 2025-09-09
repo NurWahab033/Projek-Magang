@@ -25,46 +25,48 @@ class PicController extends Controller
     }
 
     public function storePenilaian(Request $request, $user_id)
-    {
-        // Pastikan PIC hanya bisa menilai peserta yang "unit"-nya == id PIC
-        $authorized = User::where('id', $user_id)
-            ->whereHas('detailuser', function ($q) {
-                $q->where('unit', Auth::id());
-            })
-            ->exists();
+{
+    // Pastikan PIC hanya bisa menilai peserta yang "unit"-nya == id PIC
+    $authorized = User::where('id', $user_id)
+        ->whereHas('detailuser', function ($q) {
+            $q->where('unit', Auth::id());
+        })
+        ->exists();
 
-        if (! $authorized) {
-            abort(403, 'Anda tidak berhak menilai peserta ini.');
-        }
-
-        $request->validate([
-            'penyelesaian' => 'required|integer|min:0|max:100',
-            'inisiatif'    => 'required|integer|min:0|max:100',
-            'komunikasi'   => 'required|integer|min:0|max:100',
-            'kerjasama'    => 'required|integer|min:0|max:100',
-            'kedisiplinan' => 'required|integer|min:0|max:100',
-        ]);
-
-        $rata_rata = (
-            $request->penyelesaian +
-            $request->inisiatif +
-            $request->komunikasi +
-            $request->kerjasama +
-            $request->kedisiplinan
-        ) / 5;
-
-        Penilaian::updateOrCreate(
-            ['user_id' => $user_id],
-            [
-                'penyelesaian' => $request->penyelesaian,
-                'inisiatif'    => $request->inisiatif,
-                'komunikasi'   => $request->komunikasi,
-                'kerjasama'    => $request->kerjasama,
-                'kedisiplinan' => $request->kedisiplinan,
-                'rata_rata'    => $rata_rata,
-            ]
-        );
-
-        return redirect()->back()->with('success', 'Penilaian berhasil disimpan.');
+    if (! $authorized) {
+        abort(403, 'Anda tidak berhak menilai peserta ini.');
     }
+
+    $request->validate([
+        'penyelesaian' => 'required|integer|min:0|max:100',
+        'inisiatif'    => 'required|integer|min:0|max:100',
+        'komunikasi'   => 'required|integer|min:0|max:100',
+        'kerjasama'    => 'required|integer|min:0|max:100',
+        'kedisiplinan' => 'required|integer|min:0|max:100',
+    ]);
+
+    $rata_rata = (
+        $request->penyelesaian +
+        $request->inisiatif +
+        $request->komunikasi +
+        $request->kerjasama +
+        $request->kedisiplinan
+    ) / 5;
+
+    Penilaian::updateOrCreate(
+        ['user_id' => $user_id],
+        [
+            'penyelesaian' => $request->penyelesaian,
+            'inisiatif'    => $request->inisiatif,
+            'komunikasi'   => $request->komunikasi,
+            'kerjasama'    => $request->kerjasama,
+            'kedisiplinan' => $request->kedisiplinan,
+            'rata_rata'    => $rata_rata,
+            'tanggal_penilaian' => $request->tanggal_penilaian ?? now()->toDateString(),
+        ]
+    );
+
+    return redirect()->back()->with('success', 'Penilaian berhasil disimpan.');
+}
+
 }

@@ -61,7 +61,7 @@
                             <th class="px-4 py-2">Asal Institusi</th>
                             <th class="px-4 py-2">Nilai Rata-rata</th>
                             <th class="px-4 py-2">Beri Nilai</th>
-                            
+                            <th class="px-4 py-2">Tanggal Penilaian</th>
                             <th class="px-4 py-2">Detail Peserta</th>
                         </tr>
                     </thead>
@@ -79,7 +79,7 @@
                                         Beri Nilai
                                     </button>
                                 </td>
-                                
+                                <td class="px-4 py-2">{{ $peserta->penilaian->tanggal_penilaian ?? '-' }}</td>
                                 <td class="px-4 py-2">
                                     <button onclick="openDetail('{{ $peserta->id }}')" 
                                             class="bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700">
@@ -91,26 +91,35 @@
                             {{-- Modal Penilaian --}}
                             <div id="modal-{{ $peserta->id }}" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
                                 <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-                                    <h2 class="text-xl font-bold mb-4">Beri Nilai - {{ $peserta->formulirPendaftaran->nama_lengkap ?? '-' }}</h2>
+                                    <h2 class="text-xl font-bold mb-4">
+                                        Beri Nilai - {{ $peserta->formulirPendaftaran->nama_lengkap ?? '-' }}
+                                    </h2>
+
                                     <form id="form-{{ $peserta->id }}" method="POST" action="{{ route('penilaian.store', $peserta->id) }}">
                                         @csrf
+
+                                        {{-- Hidden field untuk tanggal penilaian (otomatis hari ini) --}}
+                                        <input type="hidden" name="tanggal_penilaian" value="{{ now()->toDateString() }}">
+
                                         <div class="grid grid-cols-2 gap-4">
                                             @foreach (['penyelesaian'=>'Penyelesaian','inisiatif'=>'Inisiatif','komunikasi'=>'Komunikasi','kerjasama'=>'Kerjasama','kedisiplinan'=>'Kedisiplinan'] as $field=>$label)
                                                 <div>
                                                     <label class="block text-left">{{ $label }}</label>
                                                     <input type="number" name="{{ $field }}" min="0" max="100" 
-                                                           value="{{ $peserta->penilaian->$field ?? '' }}"
-                                                           class="w-full border rounded p-2" 
-                                                           oninput="hitungRataRata('form-{{ $peserta->id }}','{{ $peserta->id }}')">
+                                                        value="{{ $peserta->penilaian->$field ?? '' }}"
+                                                        class="w-full border rounded p-2" 
+                                                        oninput="hitungRataRata('form-{{ $peserta->id }}','{{ $peserta->id }}')">
                                                 </div>
                                             @endforeach
+
                                             <div>
                                                 <label class="block text-left">Rata-rata</label>
                                                 <input type="text" id="rata_rata-{{ $peserta->id }}" name="rata_rata" readonly 
-                                                       class="w-full border rounded p-2 bg-gray-100"
-                                                       value="{{ $peserta->penilaian->rata_rata ?? '0.00' }}">
+                                                    class="w-full border rounded p-2 bg-gray-100"
+                                                    value="{{ $peserta->penilaian->rata_rata ?? '0.00' }}">
                                             </div>
                                         </div>
+
                                         <div class="flex justify-end gap-2 mt-4">
                                             <button type="button" onclick="closeModal('{{ $peserta->id }}')" 
                                                     class="px-4 py-2 bg-gray-400 text-white rounded-lg">
