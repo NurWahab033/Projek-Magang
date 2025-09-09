@@ -80,6 +80,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/sertifikasi', function () {
         return view('admin/sertifikasipeserta');
     });
+    
 });
 
 //USER
@@ -108,3 +109,5 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/sertifikasi', [SertifikatController::class, 'index'])->name('sertifikat.index');
 Route::post('/sertifikat/{id}/terbit', [SertifikatController::class, 'terbit'])->name('sertifikat.terbit');
+
+Route::get('/sertifikat/cetak/{id}', [SertifikatController::class, 'cetak'])->name('sertifikat.cetak');

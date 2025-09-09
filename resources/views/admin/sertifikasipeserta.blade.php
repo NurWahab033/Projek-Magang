@@ -56,7 +56,6 @@
       </select>
     </div>
 
-
     <!-- Tabel -->
     <div class="overflow-x-auto bg-white rounded-lg shadow border">
       <table class="min-w-full text-sm text-left border-collapse">
@@ -75,105 +74,60 @@
             <th class="px-4 py-3 border">Aksi</th>
           </tr>
         </thead>
-            <tbody id="sertifikasiTable">
-                @forelse($sertifikat as $s)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 border">{{ $loop->iteration }}</td>
-                    <td class="px-4 py-3 border">{{ $s->formulir->nama_lengkap }}</td>
-                    <td class="px-4 py-3 border">{{ $s->formulir->grade }}</td>
-                    <td class="px-4 py-3 border">{{ $s->formulir->nama_institusi }}</td>
-                    <td class="px-4 py-3 border">{{ \Carbon\Carbon::parse($s->formulir->tanggal_mulai_magang)->format('d/m/Y') }}</td>
-                    <td class="px-4 py-3 border">{{ \Carbon\Carbon::parse($s->formulir->tanggal_selesai_magang)->format('d/m/Y') }}</td>
-                    <td class="px-4 py-3 border">{{ $s->nilai ?? '-' }}</td>
-                    <td class="px-4 py-3 border nomor-sertifikat">{{ $s->nomor_sertifikat ?? '-' }}</td>
-                    <td class="px-4 py-3 border">
-                        {{ $s->tanggal_terbit ? \Carbon\Carbon::parse($s->tanggal_terbit)->format('d/m/Y') : '-' }}
-                    </td>
-                    <td class="px-4 py-3 border text-center">
-                        @if($s->status === 'izin terbit')
-                            <form action="{{ route('sertifikat.terbit', $s->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition">
-                                    Terbitkan
-                                </button>
-                            </form>
-                        @elseif($s->status === 'tersedia')
-                            <span class="text-gray-500">Sudah Diterbitkan</span>
-                        @else
-                            <span class="text-red-500">Belum Ada</span>
-                        @endif
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="11" class="px-4 py-3 border text-center text-gray-500">
-                        Belum ada data sertifikat.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
+        <tbody id="sertifikasiTable">
+          @forelse($sertifikat as $s)
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 border">{{ $loop->iteration }}</td>
+            <td class="px-4 py-3 border">{{ $s->formulir->nama_lengkap }}</td>
+            <td class="px-4 py-3 border">{{ $s->formulir->grade }}</td>
+            <td class="px-4 py-3 border">{{ $s->formulir->nama_institusi }}</td>
+            <td class="px-4 py-3 border">{{ \Carbon\Carbon::parse($s->formulir->tanggal_mulai_magang)->format('d/m/Y') }}</td>
+            <td class="px-4 py-3 border">{{ \Carbon\Carbon::parse($s->formulir->tanggal_selesai_magang)->format('d/m/Y') }}</td>
+            <td class="px-4 py-3 border">{{ $s->penilaian->rata_rata ?? '-' }}</td>
+            <td class="px-4 py-3 border nomor-sertifikat">{{ $s->nomor_sertifikat ?? '-' }}</td>
+            <td class="px-4 py-3 border">
+              {{ $s->tanggal_terbit ? \Carbon\Carbon::parse($s->tanggal_terbit)->format('d/m/Y') : '-' }}
+            </td>
+            <td class="px-4 py-3 border text-center status-sertifikat">
+            @if($s->status === 'izin terbit')
+              <form action="{{ route('sertifikat.terbit', $s->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition">
+                  Izin Terbit Sertifikat
+                </button>
+              </form>
+            @elseif($s->status === 'tersedia')
+              <span class="text-green-600 font-semibold">Sertifikat Tersedia</span>
+            @else
+              <span class="text-red-500">Belum Ada</span>
+            @endif
+          </td>
+
+            <td class="px-4 py-3 border text-center">
+              @if($s->status === 'tersedia')
+                <!-- Tombol Cetak Sertifikat -->
+                <a href="{{ route('sertifikat.cetak', $s->id) }}" target="_blank"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition">
+                  Cetak
+                </a>
+              @else
+                <span class="text-gray-500">Belum Ada Sertifikat</span>
+              @endif
+            </td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="11" class="px-4 py-3 border text-center text-gray-500">
+              Belum ada data sertifikat.
+            </td>
+          </tr>
+          @endforelse
+        </tbody>
       </table>
     </div>
   </div>
 
   <script>
-  let counterSertifikat = 1; // auto increment nomor sertifikat
-
-  // Fungsi format tanggal
-  function getToday() {
-    const today = new Date();
-    const d = String(today.getDate()).padStart(2, '0');
-    const m = String(today.getMonth() + 1).padStart(2, '0');
-    const y = today.getFullYear();
-    return `${d}/${m}/${y}`;
-  }
-
-  // Fungsi format bulan.tahun
-  function getMonthYear() {
-    const today = new Date();
-    const m = String(today.getMonth() + 1).padStart(2, '0');
-    const y = today.getFullYear();
-    return `${m}.${y}`;
-  }
-
-  // Fitur toggle izin sertifikat
-  document.querySelectorAll(".izinBtn").forEach((btn) => {
-    btn.addEventListener("click", function() {
-      const row = btn.closest("tr");
-      const statusCell = row.querySelector(".status-sertifikat");
-      const nomorCell = row.querySelector(".nomor-sertifikat");
-      const tanggalCell = row.querySelector(".tanggal-terbit");
-
-      if (statusCell.textContent.includes("Belum")) {
-        statusCell.textContent = "Sertifikat Tersedia";
-        statusCell.classList.remove("text-red-600");
-        statusCell.classList.add("text-green-600");
-
-        // Format nomor sertifikat baru
-        const nomorUrut = String(counterSertifikat).padStart(2, '0');
-        nomorCell.textContent = `${nomorUrut}/KP.02.02/90006/${getMonthYear()}`;
-
-        tanggalCell.textContent = getToday();
-        counterSertifikat++;
-
-        btn.textContent = "Batalkan";
-        btn.classList.remove("bg-blue-500", "hover:bg-blue-600");
-        btn.classList.add("bg-red-500", "hover:bg-red-600");
-      } else {
-        statusCell.textContent = "Sertifikat Belum Tersedia";
-        statusCell.classList.remove("text-green-600");
-        statusCell.classList.add("text-red-600");
-
-        nomorCell.textContent = "-";
-        tanggalCell.textContent = "-";
-
-        btn.textContent = "Izin Terbit Sertifikat";
-        btn.classList.remove("bg-red-500", "hover:bg-red-600");
-        btn.classList.add("bg-blue-500", "hover:bg-blue-600");
-      }
-    });
-  });
-
   // Fitur search & filter
   const searchInput = document.getElementById("searchInput");
   const filterTingkat = document.getElementById("filterTingkat");
@@ -184,11 +138,11 @@
     const rows = document.querySelectorAll("#sertifikasiTable tr");
 
     rows.forEach(row => {
-      const nama = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
-      const tingkat = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
+      const nama = row.querySelector("td:nth-child(2)")?.textContent.toLowerCase() || "";
+      const tingkat = row.querySelector("td:nth-child(3)")?.textContent.toLowerCase() || "";
 
       const matchNama = nama.includes(keyword);
-      const matchTingkat = !tingkatFilter || tingkat === tingkatFilter;
+      const matchTingkat = !tingkatFilter || tingkat.includes(tingkatFilter);
 
       if (matchNama && matchTingkat) {
         row.style.display = "";
@@ -200,7 +154,7 @@
 
   searchInput.addEventListener("keyup", filterTable);
   filterTingkat.addEventListener("change", filterTable);
-</script>
+  </script>
 
 </body>
 </html>

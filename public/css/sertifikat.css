@@ -1,0 +1,182 @@
+body {
+        font-family: 'Calibri', serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    .container {
+        text-align: center;
+        padding: 20px;
+    }
+    .page {
+        width: 210mm;
+        height: 297mm;
+        background: white;
+        margin: auto;
+        padding: 40px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        position: relative;
+        overflow: hidden; 
+        page-break-after: always;
+}
+
+/* Background watermark */
+    .page .watermark {
+        position: absolute;
+        top: 35%; 
+        left: 35%;
+        opacity: 0.15;
+        width: 800px; 
+        height: auto; 
+        pointer-events: none; 
+        z-index: 0; 
+}
+
+    .back-btn {
+        position: fixed; 
+        top: 20px;
+        left: 20px;
+        margin: 0;
+        padding: 10px 16px;
+        background: #f0eaea;
+        color: #9e3d3d;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        z-index: 999; 
+}
+    .btn-print {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #9e3d3d;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+    .btn-print:hover {
+        background-color: #005fa3;
+    }
+    .page {
+        width: 210mm;
+        height: 297mm;
+        background: white;
+        margin: auto;
+        padding: 40px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        position: relative;
+        page-break-after: always;
+    }
+
+    /* Logo atas */
+    .logo-left {
+        position: absolute;
+        top: 30px;
+        left: 40px;
+        height: 120px;
+    }
+    .logo-right {
+        position: absolute;
+        top: 60px;
+        right: 40px;
+        height: 90px;
+    }
+
+    /* Halaman Depan */
+    .judul {
+        margin-top: 130px;
+        font-size: 84px;
+        font-weight: bold;
+    }
+    .nomor {
+        font-size: 27px;
+        margin-top: 5px;
+    }
+    .isi {
+        margin-top: 40px;
+        font-size: 25px;
+    }
+    .penerima {
+        padding-top: 40px;
+        font-size: 26px;
+        margin: 20px 0;
+    }
+
+    .program {
+        color: #0056b3;
+        font-weight: bold;
+        font-size: 26px;
+    }
+
+    .ttd {
+        position: absolute;
+        bottom: 60px;
+        right: 80px;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    .space-ttd {
+    height: 150px; 
+    }
+
+    /* Halaman Belakang */
+    .judul-tabel {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .subjudul {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 16px;
+    }
+    table, th, td {
+        border: 1px solid #333;
+    }
+    th {
+        background-color: #9bbb59;
+        color: black;
+        padding: 10px;
+        text-align: center;
+    }
+    td {
+        padding: 5px;
+        vertical-align: top;
+    }
+
+    .signature{
+        font-size: 20px;
+    }
+    #qrcode {
+        width: 80px;
+        height: 80px;
+    }
+
+    @media print {
+        body {
+            background: white;
+        }
+        .back-btn {  /* tambahkan ini */
+        display: none;
+        }
+        .btn-print {
+            display: none;
+        }
+        .page {
+            box-shadow: none;
+            margin: 0;
+        }
+    }
