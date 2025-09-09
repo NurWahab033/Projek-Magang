@@ -62,7 +62,6 @@ class AdminController extends Controller
         return view('admin.create-pic');
     }
 
-    // AdminController.php
     public function storePic(Request $request)
     {
         $request->validate([
@@ -83,6 +82,48 @@ class AdminController extends Controller
         return redirect()->route('detailAkun')->with('success', 'Akun PIC berhasil ditambahkan');
     }
 
+    public function createPeserta()
+    {
+        return view('admin.create-peserta');
+    }
+
+    public function storePeserta(Request $request)
+    {
+        $request->validate([
+            'nama'      => 'required|string|max:100',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|string|min:6',
+            'institusi' => 'required|string|max:100',
+        ]);
+
+        // 1. Simpan ke tabel users
+        $user = \App\Models\User::create([
+            'username'       => $request->nama,
+            'email'          => $request->email,
+            'password'       => bcrypt($request->password),
+            'role'           => \App\Models\User::ROLE_PESERTA,
+            'nama_institusi' => $request->institusi,
+        ]);
+
+        \App\Models\FormulirPendaftaran::create([
+            'user_id'                => $user->id,
+            'nama_lengkap'           => $request->nama,
+            'alamat'                 => $request->alamat,
+            'no_telp'                => $request->no_telp,
+            'email'                  => $request->email,
+            'nama_institusi'         => $request->institusi,
+            'jurusan'                => $request->jurusan,
+            'tanggal_mulai_magang'   => now(),
+            'tanggal_selesai_magang' => now()->addMonths(1),
+            'grade'                  => 'Mahasiswa',
+            'fakultas'               => $request->fakultas,
+            'jenjang'                => $request->jenjang,
+            'file_surat'             => '-',
+            'status'                 => 'diterima',
+        ]);
+
+        return redirect()->route('detailAkun')->with('success', 'Akun Peserta berhasil ditambahkan & otomatis diterima.');
+    }
 
     public function detailAkun()
     {

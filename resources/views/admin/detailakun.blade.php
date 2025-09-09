@@ -44,30 +44,55 @@
     </nav>
   </div>
 
-  <!-- Content Peserta -->
-  <section id="content-peserta" class="px-6 mt-6 tab-content">
+    <!-- Content Peserta -->
+    <section id="content-peserta" class="px-6 mt-6 tab-content">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-bold">Daftar Peserta</h2>
-      <div class="flex gap-2">
-        <button onclick="openModal('formAkunPesertaModal')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          + Tambah Akun Peserta
+        <h2 class="text-lg font-bold">Daftar Peserta</h2>
+        <div class="flex gap-2">
+        <button onclick="openModal('formAkunPesertaModal')"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            + Tambah Akun Peserta
         </button>
-      </div>
+        </div>
     </div>
+
     <table class="min-w-full border" id="pesertaTable">
-      <thead class="bg-gray-100">
+        <thead class="bg-gray-100">
         <tr>
-          <th class="border px-4 py-2">Nama</th>
-          <th class="border px-4 py-2">Email</th>
-          <th class="border px-4 py-2">Password</th>
-          <th class="border px-4 py-2">Institusi</th>
-          <th class="border px-4 py-2">Aksi</th>
-          <th class="border px-4 py-2">Reset Password</th>
+            <th class="border px-4 py-2">Nama</th>
+            <th class="border px-4 py-2">Email</th>
+            <th class="border px-4 py-2">Password</th>
+            <th class="border px-4 py-2">Institusi</th>
+            <th class="border px-4 py-2">Aksi</th>
+            <th class="border px-4 py-2">Reset Password</th>
         </tr>
-      </thead>
-      <tbody></tbody>
+        </thead>
+        <tbody>
+        @foreach($pesertas as $peserta)
+            <tr>
+            <td class="border px-4 py-2">{{ $peserta->username }}</td>
+            <td class="border px-4 py-2">{{ $peserta->email }}</td>
+            <td class="border px-4 py-2">********</td>
+            <td class="border px-4 py-2">{{ $peserta->nama_institusi }}</td>
+            <td class="border px-4 py-2">
+                <!-- contoh tombol delete -->
+                <form action="#" method="POST" onsubmit="return confirm('Hapus peserta ini?')">
+                @csrf
+                @method('DELETE')
+                <button class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700">Hapus</button>
+                </form>
+            </td>
+            <td class="border px-4 py-2">
+                <button onclick="openResetPasswordModal('{{ $peserta->email }}')"
+                        class="bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700">
+                Reset Password
+                </button>
+            </td>
+            </tr>
+        @endforeach
+        </tbody>
     </table>
-  </section>
+    </section>
 
   <!-- Content PIC -->
   <section id="content-pic" class="px-6 mt-6 tab-content hidden">
@@ -106,35 +131,129 @@
     </table>
   </section>
 
-  <!-- ========== Modal Tambah Akun Peserta ========== -->
-  <div id="formAkunPesertaModal" class="modal">
-    <div class="modal-box">
-      <h3 class="text-lg font-bold mb-4">Tambah Akun Peserta</h3>
-      <form id="formAkunPeserta">
+    <!-- ========== Modal Tambah Akun Peserta ========== -->
+    <div id="formAkunPesertaModal" class="modal hidden">
+    <div class="modal-box max-w-2xl">
+        <h3 class="text-lg font-bold mb-4">Tambah Akun Peserta</h3>
+
+        <form id="formAkunPeserta" action="{{ route('storePeserta') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <!-- Nama -->
         <div class="mb-3">
-          <label class="block font-semibold">Nama</label>
-          <input type="text" name="nama" required>
+            <label class="block font-semibold">Nama Lengkap</label>
+            <input type="text" name="nama" class="w-full border rounded px-2 py-1" required>
         </div>
+
+        <!-- Email -->
         <div class="mb-3">
-          <label class="block font-semibold">Email</label>
-          <input type="email" name="email" required>
+            <label class="block font-semibold">Email</label>
+            <input type="email" name="email" class="w-full border rounded px-2 py-1" required>
         </div>
+
+        <!-- Email -->
         <div class="mb-3">
-          <label class="block font-semibold">Password</label>
-          <input type="password" name="password" required>
+            <label class="block font-semibold">Alamat</label>
+            <input type="text" name="alamat" class="w-full border rounded px-2 py-1" required>
         </div>
+
+        <!-- Email -->
         <div class="mb-3">
-          <label class="block font-semibold">Institusi</label>
-          <input type="text" name="institusi" required>
+            <label class="block font-semibold">Nomor Telepon</label>
+            <input type="text" name="no_telp" class="w-full border rounded px-2 py-1" required>
         </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+            <label class="block font-semibold">Password</label>
+            <input type="password" name="password" class="w-full border rounded px-2 py-1" required>
+        </div>
+
+        <!-- Institusi -->
+        <div class="mb-3">
+            <label class="block font-semibold">Institusi</label>
+            <input type="text" name="institusi" class="w-full border rounded px-2 py-1" required>
+        </div>
+
+        <!-- Jurusan -->
+        <div class="mb-3">
+            <label class="block font-semibold">Jurusan</label>
+            <input type="text" name="jurusan" class="w-full border rounded px-2 py-1" required>
+        </div>
+
+        <!-- Tanggal Mulai & Selesai -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+            <div>
+            <label class="block font-semibold">Tanggal Mulai Magang</label>
+            <input type="date" name="tanggal_mulai_magang" class="w-full border rounded px-2 py-1" required>
+            </div>
+            <div>
+            <label class="block font-semibold">Tanggal Selesai Magang</label>
+            <input type="date" name="tanggal_selesai_magang" class="w-full border rounded px-2 py-1" required>
+            </div>
+        </div>
+
+        <!-- Grade -->
+        <div class="mb-3">
+            <label class="block font-semibold mb-1">Grade</label>
+            <div class="flex gap-6">
+            <label class="inline-flex items-center">
+                <input type="radio" name="grade" value="Mahasiswa" onclick="toggleMahasiswaFields()" required>
+                <span class="ml-2">Mahasiswa</span>
+            </label>
+            <label class="inline-flex items-center">
+                <input type="radio" name="grade" value="Siswa" onclick="toggleMahasiswaFields()" required>
+                <span class="ml-2">Siswa</span>
+            </label>
+            </div>
+        </div>
+
+        <!-- Field tambahan kalau Mahasiswa -->
+        <div id="mahasiswa-fields" class="hidden">
+            <div class="mb-3">
+            <label class="block font-semibold">Fakultas</label>
+            <input type="text" name="fakultas" class="w-full border rounded px-2 py-1">
+            </div>
+            <div class="mb-3">
+            <label class="block font-semibold">Jenjang</label>
+            <select name="jenjang" class="w-full border rounded px-2 py-1">
+                <option value="">-- Pilih Jenjang --</option>
+                <option value="S1">S1</option>
+                <option value="S2">S2</option>
+            </select>
+            </div>
+        </div>
+
+        <!-- Tombol -->
         <div class="flex justify-end gap-2">
-          <button type="button" onclick="closeModal('formAkunPesertaModal')" class="bg-gray-400 text-white px-4 py-2 rounded">Batal</button>
-          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
+            <button type="button" onclick="closeModal('formAkunPesertaModal')"
+            class="bg-gray-400 text-white px-4 py-2 rounded">
+            Batal
+            </button>
+            <button type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded">
+            Simpan
+            </button>
         </div>
-      </form>
+        </form>
     </div>
-  </div>
+    </div>
+
+    <script>
+    function toggleMahasiswaFields() {
+        const mahasiswaFields = document.getElementById("mahasiswa-fields");
+        const gradeMahasiswa = document.querySelector('input[name="grade"][value="Mahasiswa"]');
+
+        const inputs = mahasiswaFields.querySelectorAll('input, select');
+
+        if (gradeMahasiswa.checked) {
+            mahasiswaFields.classList.remove("hidden");
+            inputs.forEach(input => input.required = true);
+        } else {
+            mahasiswaFields.classList.add("hidden");
+            inputs.forEach(input => input.required = false);
+        }
+    }
+    </script>
 
   <!-- ========== Modal Tambah Akun PIC ========== -->
   <div id="formAkunPicModal" class="modal">
