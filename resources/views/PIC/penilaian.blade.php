@@ -6,7 +6,7 @@
     <style>
 .line-clamp-3 {
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Batasi 3 baris */
+  -webkit-line-clamp: 3; 
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -28,20 +28,33 @@
             </div>
         @endif
 
+            <!-- Filter & Search -->
+            <div class="flex flex-col md:flex-row items-center gap-3 mb-6">
+            <input id="searchText" type="text" placeholder="Cari berdasarkan nama / sekolah / tingkat"
+                class="border border-gray-300 px-3 py-2 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-purple-400 focus:border-purple-400 flex-1">
+
+            <button onclick="cariPeserta()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow font-medium">
+                Cari
+            </button>
+            </div>
+
         <div class="bg-white rounded-xl shadow overflow-hidden">
             @if($pesertas->isEmpty())
                 <div class="p-6 text-center text-gray-600">
                     Belum ada peserta di unit Anda.
                 </div>
             @else
-                <table class="min-w-full border text-center">
+                <table id="tabel-peserta" class="min-w-full border text-center">
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="px-4 py-2">No</th>
                             <th class="px-4 py-2">Nama Peserta</th>
+                            <th class="px-4 py-2">Grade</th>
                             <th class="px-4 py-2">Asal Institusi</th>
                             <th class="px-4 py-2">Nilai Rata-rata</th>
                             <th class="px-4 py-2">Beri Nilai</th>
+                            
                             <th class="px-4 py-2">Detail Peserta</th>
                         </tr>
                     </thead>
@@ -50,6 +63,7 @@
                             <tr class="border-t">
                                 <td class="px-4 py-2">{{ $i+1 }}</td>
                                 <td class="px-4 py-2">{{ $peserta->formulirPendaftaran->nama_lengkap ?? '-' }}</td>
+                                <td class="px-4 py-2">{{ $peserta->formulirPendaftaran->grade ?? '-' }}</td>
                                 <td class="px-4 py-2">{{ $peserta->formulirPendaftaran->nama_institusi ?? '-' }}</td>
                                 <td class="px-4 py-2">{{ $peserta->penilaian->rata_rata ?? 0 }}</td>
                                 <td class="px-4 py-2">
@@ -424,6 +438,37 @@
                 btn.textContent = 'Lihat Selengkapnya';
             }
         }
+
+        // ===== Fungsi Search =====
+        function cariPeserta() {
+        const input = document.getElementById("searchText").value.toLowerCase().trim();
+        const rows = document.querySelectorAll("#tabel-peserta tbody tr");
+
+        // bikin regex agar cocok kata utuh (misal "siswa" ≠ "mahasiswa")
+        const regex = new RegExp("\\b" + input + "\\b", "i");
+
+        rows.forEach(row => {
+        const nama = row.querySelector(".nama-peserta")?.textContent.toLowerCase() || "";
+        const sekolah = row.querySelector(".asal-sekolah")?.textContent.toLowerCase() || "";
+        const grade = row.querySelector(".grade")?.textContent.toLowerCase() || "";
+
+        // pecah per kata biar lebih presisi
+        const namaWords = nama.split(/\s+/);
+        const sekolahWords = sekolah.split(/\s+/);
+        const gradeWords = grade.split(/\s+/);
+
+        const matchNama = namaWords.some(w => regex.test(w));
+        const matchSekolah = sekolahWords.some(w => regex.test(w));
+        const matchGrade = gradeWords.some(w => regex.test(w));
+
+        if (matchNama || matchSekolah || matchGrade) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+        });
+    }
+
     </script>
 </body>
 </html>

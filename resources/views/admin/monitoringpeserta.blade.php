@@ -64,14 +64,19 @@
             @foreach ($pesertas as $index => $peserta)
               <tr class="hover:bg-gray-50 transition">
                 <td class="px-4 py-3">{{ $index + 1 }}</td>
-                <td class="px-4 py-3 font-medium text-gray-800 nama-peserta">{{ $peserta->username }}</td>
+                <td class="px-4 py-3 font-medium text-gray-800 nama-peserta">{{ $peserta->formulirPendaftaran->nama_lengkap ?? '-' }}</td>
                 <td class="px-4 py-3 grade">{{ $peserta->formulirPendaftaran->grade ?? '-' }}</td>
                 <td class="px-4 py-3 asal-sekolah">{{ $peserta->formulirPendaftaran->nama_institusi ?? '-' }}</td>
+
+                <!-- Kolom Select PIC -->
                 <td class="px-4 py-3">
-                  <form action="{{ route('update.unit', $peserta->id) }}" method="POST">
+                  <form id="form-unit-{{ $peserta->id }}" action="{{ route('update.unit', $peserta->id) }}" method="POST">
                     @csrf
-                    <select name="unit" onchange="this.form.submit()"
-                      class="border border-gray-300 px-2 py-1 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-purple-400 focus:border-purple-400">
+                    <select name="unit"
+                      class="border border-gray-300 px-2 py-1 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-purple-400 focus:border-purple-400
+                        {{ optional($peserta->detailuser)->unit ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                      {{ optional($peserta->detailuser)->unit ? 'disabled' : '' }}
+                      title="{{ optional($peserta->detailuser)->unit ? 'Hapus PIC terlebih dahulu untuk mengubah' : 'Pilih PIC' }}">
                       <option value="">-- Pilih PIC --</option>
                       @foreach($picUsers as $pic)
                         <option value="{{ $pic->id }}" {{ optional($peserta->detailuser)->unit == $pic->id ? 'selected' : '' }}>
@@ -81,28 +86,33 @@
                     </select>
                   </form>
                 </td>
-                <td class="px-4 py-3 flex items-center justify-center gap-2">
-                  <!-- Tombol Konfirmasi -->
-                  <button onclick="konfirmasiPeserta(this)"
-                    class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs font-medium shadow">
-                    Konfirmasi
-                  </button>
 
-                  <!-- Tombol Detail Peserta -->
+                <!-- Kolom Aksi -->
+                <td class="px-4 py-3 flex items-center justify-center gap-2">
+                  @if(optional($peserta->detailuser)->unit)
+                    <!-- Jika sudah punya PIC: hanya tombol Hapus PIC -->
+                    <form action="{{ route('delete.unit', $peserta->id) }}" method="POST" 
+                          onsubmit="return confirm('Yakin hapus PIC dari peserta ini?')">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-medium shadow">
+                        Hapus PIC
+                      </button>
+                    </form>
+                  @else
+                    <!-- Jika belum punya PIC: tombol Konfirmasi (submit form select) -->
+                    <button type="button" onclick="konfirmasiPeserta(this)"
+                      class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs font-medium shadow">
+                      Konfirmasi
+                    </button>
+                  @endif
+
+                  <!-- Tombol Detail Peserta selalu ada -->
                   <button id="detailBtn"
                     class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg text-xs font-medium shadow">
                     Detail Peserta
                   </button>
-
-                  <!-- Tombol Hapus PIC -->
-                <form action="{{ route('delete.unit', $peserta->id) }}" method="POST" onsubmit="return confirm('Yakin hapus PIC dari peserta ini?')">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit"
-                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-medium shadow">
-                    Hapus PIC
-                  </button>
-                </form>
                 </td>
               </tr>
             @endforeach
@@ -111,6 +121,61 @@
       </div>
     </div>
   </div>
+
+  <!-- Script kecil untuk konfirmasi -->
+  <script>
+    'use strict';
+
+  function konfirmasiPeserta(btn) {
+    const row = btn.closest('tr');
+    if (!row) return;
+
+    const select = row.querySelector('select[name="unit"]');
+    if (!select) return;
+
+    if (!select.value) {
+      alert('Silakan pilih PIC terlebih dahulu.');
+      select.focus();
+      return;
+    }
+
+    if (!confirm('Simpan PIC yang dipilih untuk peserta ini?')) {
+      return;
+    }
+
+    const form = select.form;
+    if (form) form.submit();
+  }
+
+  function cariPeserta() {
+    const input = document.getElementById("searchText").value.toLowerCase().trim();
+    const rows = document.querySelectorAll("#tabel-peserta tbody tr");
+
+    // bikin regex agar cocok kata utuh (misal "siswa" ≠ "mahasiswa")
+    const regex = new RegExp("\\b" + input + "\\b", "i");
+
+    rows.forEach(row => {
+      const nama = row.querySelector(".nama-peserta")?.textContent.toLowerCase() || "";
+      const sekolah = row.querySelector(".asal-sekolah")?.textContent.toLowerCase() || "";
+      const grade = row.querySelector(".grade")?.textContent.toLowerCase() || "";
+
+      // pecah per kata biar lebih presisi
+      const namaWords = nama.split(/\s+/);
+      const sekolahWords = sekolah.split(/\s+/);
+      const gradeWords = grade.split(/\s+/);
+
+      const matchNama = namaWords.some(w => regex.test(w));
+      const matchSekolah = sekolahWords.some(w => regex.test(w));
+      const matchGrade = gradeWords.some(w => regex.test(w));
+
+      if (matchNama || matchSekolah || matchGrade) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+  </script>
 
 </body>
 </html>
