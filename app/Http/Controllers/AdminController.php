@@ -105,9 +105,6 @@ class AdminController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Password PIC berhasil direset',
-        ]);
+        return redirect()->route('detailAkun')->with('success', 'Password berhasil direset');
     }
 }
