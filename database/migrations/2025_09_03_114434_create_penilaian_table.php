@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('kedisiplinan')->nullable();
 
             $table->float('rata_rata')->nullable();
-
+            $table->float('tanggal_penilaian')->nullable();
             $table->timestamps();
         });
     }

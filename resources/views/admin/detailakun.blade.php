@@ -61,9 +61,7 @@
         <tr>
             <th class="border px-4 py-2">Nama</th>
             <th class="border px-4 py-2">Email</th>
-            <th class="border px-4 py-2">Password</th>
             <th class="border px-4 py-2">Institusi</th>
-            <th class="border px-4 py-2">Aksi</th>
             <th class="border px-4 py-2">Reset Password</th>
         </tr>
         </thead>
@@ -72,16 +70,7 @@
             <tr>
             <td class="border px-4 py-2">{{ $peserta->username }}</td>
             <td class="border px-4 py-2">{{ $peserta->email }}</td>
-            <td class="border px-4 py-2">********</td>
             <td class="border px-4 py-2">{{ $peserta->nama_institusi }}</td>
-            <td class="border px-4 py-2">
-                <!-- contoh tombol delete -->
-                <form action="#" method="POST" onsubmit="return confirm('Hapus peserta ini?')">
-                @csrf
-                @method('DELETE')
-                <button class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700">Hapus</button>
-                </form>
-            </td>
             <td class="border px-4 py-2">
                 <button onclick="openResetPasswordModal('{{ $peserta->email }}')"
                         class="bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700">
@@ -107,8 +96,7 @@
         <tr>
           <th class="border px-4 py-2">Nama</th>
           <th class="border px-4 py-2">Email</th>
-          <th class="border px-4 py-2">Password</th>
-          <th class="border px-4 py-2">Divisi</th>
+          <th class="border px-4 py-2">Unit</th>
           <th class="border px-4 py-2">Aksi</th>
         </tr>
       </thead>
@@ -117,7 +105,6 @@
           <tr>
             <td class="border px-4 py-2">{{ $pic->username }}</td>
             <td class="border px-4 py-2">{{ $pic->email }}</td>
-            <td class="border px-4 py-2">********</td>
             <td class="border px-4 py-2">{{ $pic->nama_institusi }}</td>
             <td class="border px-4 py-2">
               <button onclick="openModal('resetpasspic'); document.getElementById('resetEmailPic').value='{{ $pic->email }}'"
@@ -332,7 +319,7 @@
               <span class="ml-2">Mahasiswa</span>
             </label>
             <label class="inline-flex items-center">
-              <input type="radio" name="grade" value="Siswa" onclick="toggleMahasiswaFields()" required>
+              <input type="radio" name="grade" value="Siswa" onclick="toggleSiswaFields()" required>
               <span class="ml-2">Siswa</span>
             </label>
           </div>

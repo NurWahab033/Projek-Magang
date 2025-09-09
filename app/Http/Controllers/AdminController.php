@@ -115,7 +115,7 @@ class AdminController extends Controller
             'jurusan'                => $request->jurusan,
             'tanggal_mulai_magang'   => now(),
             'tanggal_selesai_magang' => now()->addMonths(1),
-            'grade'                  => 'Mahasiswa',
+            'grade'                  => $request->grade,
             'fakultas'               => $request->fakultas,
             'jenjang'                => $request->jenjang,
             'file_surat'             => '-',
