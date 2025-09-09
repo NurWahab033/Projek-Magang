@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
@@ -29,7 +30,9 @@ Route::post('/register', [RegisterController::class, 'register']);
 //PESERTA
 Route::middleware(['auth', 'peserta'])->group(function () {
     //laman peserta
-    Route::get('/peserta', function () {return view('peserta/lamanpeserta');});
+    Route::get('/peserta', function () {
+        return view('peserta/lamanpeserta');
+    });
     //presensi
     Route::get('/presensi', [CheckClockController::class, 'index'])->name('checkclock.index');
     Route::post('/presensi', [CheckClockController::class, 'store'])->name('checkclock.store');
@@ -44,18 +47,26 @@ Route::middleware(['auth', 'peserta'])->group(function () {
     //laporanakhir
     Route::resource('Laporan-Akhir', LaporanAkhirController::class)->middleware('auth');
     //Sertifikat
-    Route::get('/sertifikat', function () {return view('peserta/cetaksertifikat');});
-    Route::get('/sertif', function () {return view('peserta/sertifikat');});
+    Route::get('/sertifikat', function () {
+        return view('peserta/cetaksertifikat');
+    });
+    Route::get('/sertif', function () {
+        return view('peserta/sertifikat');
+    });
 });
 
 //ADMIN
 Route::middleware(['auth', 'admin'])->group(function () {
     //laman admin
-    Route::get('/admin', function () { return view('admin/lamanadmin');});
+    Route::get('/admin', function () {
+        return view('admin/lamanadmin');
+    });
     //detailakun
     Route::get('/detailakun', [AdminController::class, 'detailAkun'])->name('detailAkun');
     Route::get('/create-pic', [AdminController::class, 'createPic'])->name('createPic');
     Route::post('/store-pic', [AdminController::class, 'storePic'])->name('storePic');
+    Route::get('/admin/create-peserta', [AdminController::class, 'createPeserta'])->name('createPeserta');
+    Route::post('/admin/store-peserta', [AdminController::class, 'storePeserta'])->name('storePeserta');
     Route::post('/reset-password-pic', [AdminController::class, 'resetPasswordPic'])->name('resetPasswordPic');
     Route::put('/formpendaftaran/{id}/status', [AdminController::class, 'updateStatus'])->name('formpendaftaran.updateStatus');
     //verifikasi
@@ -65,13 +76,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/monitoring/{id}/update-unit', [MonitoringController::class, 'updateUnit'])->name('update.unit');
     Route::delete('/monitoring/{id}/hapus-unit', [MonitoringController::class, 'deleteUnit'])->name('delete.unit');
     //sertifikasi
-    Route::get('/sertifikasi', function () {return view('admin/sertifikasipeserta');});
+    Route::get('/sertifikasi', function () {
+        return view('admin/sertifikasipeserta');
+    });
 });
 
-//USER 
+//USER
 Route::middleware(['auth', 'user'])->group(function () {
     //lamanuser
-    Route::get('/user', function () {return view('user/lamanuser');})->name('user.dashboard');
+    Route::get('/user', function () {
+        return view('user/lamanuser');
+    })->name('user.dashboard');
     //formpendaftaran
     Route::get('/formpendaftaran', [FormulirPendaftaranController::class, 'create'])->name('formulir.create');
     Route::post('/formpendaftaran', [FormulirPendaftaranController::class, 'store'])->name('formulir.store');
@@ -89,4 +104,3 @@ Route::middleware(['auth', 'pic'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/update-photo', [DetailUserController::class, 'updatePhoto'])->name('updatePhoto');
 });
-
