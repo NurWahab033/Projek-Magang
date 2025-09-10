@@ -12,6 +12,7 @@ class Penilaian extends Model
     protected $table = 'penilaian';
 
     protected $fillable = [
+        'pic_id',
         'user_id',
         'penyelesaian',
         'inisiatif',
@@ -27,4 +28,12 @@ class Penilaian extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+// App\Models\Penilaian.php
+        public function pic()
+        {
+            return $this->belongsTo(User::class, 'pic_id', 'id');
+        }
+
+
 }

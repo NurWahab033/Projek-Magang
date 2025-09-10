@@ -17,7 +17,8 @@ return new class extends Migration
             // UUID karena users.id adalah UUID
             $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
+            $table->uuid('pic_id')->nullable();
+            $table->foreign('pic_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('penyelesaian')->nullable();
             $table->integer('inisiatif')->nullable();
             $table->integer('komunikasi')->nullable();

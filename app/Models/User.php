@@ -109,4 +109,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Sertifikat::class, 'formulir_id', 'formulir_pendaftaran.id');
     }
+
+    public function pic()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+
 }

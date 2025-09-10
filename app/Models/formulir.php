@@ -28,4 +28,5 @@ class Formulir extends Model
         'tanggal_mulai_magang' => 'date',
         'tanggal_selesai_magang' => 'date',
     ];
+    
 }

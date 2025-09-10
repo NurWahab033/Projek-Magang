@@ -58,6 +58,7 @@ class PicController extends Controller
         Penilaian::updateOrCreate(
             ['user_id' => $user_id],
             [
+                'pic_id'       => Auth::id(), // 👈 simpan PIC yang memberi nilai
                 'penyelesaian' => $request->penyelesaian,
                 'inisiatif'    => $request->inisiatif,
                 'komunikasi'   => $request->komunikasi,
@@ -94,7 +95,20 @@ class PicController extends Controller
             }
         }
 
-
         return redirect()->back()->with('success', 'Penilaian berhasil disimpan dan sertifikat otomatis dibuat.');
     }
+
+        public function cetak($id)
+    {
+        $sertifikat = \App\Models\Sertifikat::with([
+            'formulir',
+            'penilaian.user'  // Ambil user yang memberikan penilaian (PIC)
+        ])->findOrFail($id);
+
+        // PIC adalah user yang memberikan penilaian
+        $pic = $sertifikat->penilaian->user ?? null;
+
+        return view('admin.sertifikatcetak', compact('sertifikat', 'pic'));
+    }
+
 }

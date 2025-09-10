@@ -12,6 +12,8 @@ use App\Http\Controllers\DetailUserController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\PicController;
 use App\Http\Controllers\SertifikatController;
+use App\Http\Controllers\PesertaController;
+use App\Http\Controllers\CetakSertifikatController;
 
 //form login
 Route::get('/login', function () {
@@ -48,21 +50,29 @@ Route::middleware(['auth', 'peserta'])->group(function () {
     //laporanakhir
     Route::resource('Laporan-Akhir', LaporanAkhirController::class)->middleware('auth');
     //Sertifikat
-    Route::get('/sertifikat', function () {
-        return view('peserta/cetaksertifikat');
-    });
-    Route::get('/sertif', function () {
-        return view('peserta/sertifikat');
-    });
+    // Route::get('/sertifikat', function () {
+    //     return view('peserta/cetaksertifikat');
+    // });
+
+    Route::get('/sertifikat', [SertifikatController::class, 'indexPeserta'])->name('sertifikat.index');
+    
+
+    // Route::get('/peserta/sertifikat/{id}/cetak', [PesertaController::class, 'cetakSertifikat'])
+    //     ->name('peserta.sertifikat.cetak');
+
+
+    // Route::get('/sertifikat', function () {
+    //     return view('peserta/sertifikat');
+    // });
+
 });
 
 //ADMIN
 Route::middleware(['auth', 'admin'])->group(function () {
-    //laman admin
-    Route::get('/admin', function () {
-        return view('admin/lamanadmin');
-    });
-    //detailakun
+    // Dashboard admin (lamanadmin.blade.php)
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    // detailakun
     Route::get('/detailakun', [AdminController::class, 'detailAkun'])->name('detailAkun');
     Route::get('/create-pic', [AdminController::class, 'createPic'])->name('createPic');
     Route::post('/store-pic', [AdminController::class, 'storePic'])->name('storePic');
@@ -70,17 +80,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/store-peserta', [AdminController::class, 'storePeserta'])->name('storePeserta');
     Route::post('/reset-password-pic', [AdminController::class, 'resetPasswordPic'])->name('resetPasswordPic');
     Route::put('/formpendaftaran/{id}/status', [AdminController::class, 'updateStatus'])->name('formpendaftaran.updateStatus');
-    //verifikasi
+
+    // verifikasi
     Route::get('/verifikasi', [AdminController::class, 'index']);
-    //monitoring
+
+    // monitoring
     Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
     Route::post('/monitoring/{id}/update-unit', [MonitoringController::class, 'updateUnit'])->name('update.unit');
     Route::delete('/monitoring/{id}/hapus-unit', [MonitoringController::class, 'deleteUnit'])->name('delete.unit');
-    //sertifikasi
+
+    // sertifikasi
     Route::get('/sertifikasi', function () {
         return view('admin/sertifikasipeserta');
     });
-    
 });
 
 //USER
@@ -111,3 +123,19 @@ Route::get('/sertifikasi', [SertifikatController::class, 'index'])->name('sertif
 Route::post('/sertifikat/{id}/terbit', [SertifikatController::class, 'terbit'])->name('sertifikat.terbit');
 
 Route::get('/sertifikat/cetak/{id}', [SertifikatController::class, 'cetak'])->name('sertifikat.cetak');
+
+
+Route::middleware(['auth:peserta'])->group(function () {
+    Route::get('/peserta/sertifikat/cetak/{id}', [CetakSertifikatController::class, 'cetakPeserta'])
+        ->name('peserta.sertifikat.cetak');
+});
+
+Route::middleware(['auth'])->group(function() {
+    Route::get('/peserta/cetak-sertifikat/{id}', [CetakSertifikatController::class, 'show'])->name('peserta.cetak.sertifikat');
+});
+
+Route::middleware(['auth', 'peserta'])->group(function () {
+    Route::get('/peserta/sertifikat/{id}/cetak', [PesertaController::class, 'cetakSertifikat'])
+        ->name('peserta.sertifikat.cetak');
+});
+

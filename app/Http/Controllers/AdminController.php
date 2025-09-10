@@ -148,4 +148,17 @@ class AdminController extends Controller
 
         return redirect()->route('detailAkun')->with('success', 'Password berhasil direset');
     }
+
+    public function dashboard()
+{
+    // jumlah siswa & mahasiswa dari tabel formulir_pendaftaran
+    $totalSiswa = \App\Models\FormulirPendaftaran::where('grade', 'Siswa')->count();
+    $totalMahasiswa = \App\Models\FormulirPendaftaran::where('grade', 'Mahasiswa')->count();
+
+    // jumlah PIC dari tabel users (role = 4)
+    $totalPic = \App\Models\User::where('role', \App\Models\User::ROLE_PIC)->count();
+
+    return view('admin.lamanadmin', compact('totalSiswa', 'totalMahasiswa', 'totalPic'));
+}
+
 }

@@ -34,22 +34,6 @@
       🚀 Dashboard Admin
     </h1>
 
-    <!-- Dashboard Statistik -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
-      <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center hover:scale-105 hover:shadow-blue-300/60 transition-all duration-500 animate__animated animate__fadeInUp">
-        <h3 class="text-md font-semibold text-gray-500">Total Siswa</h3>
-        <p class="text-4xl font-bold text-blue-600 mt-2">46</p>
-      </div>
-      <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center hover:scale-105 hover:shadow-purple-300/60 transition-all duration-500 animate__animated animate__fadeInUp animate__delay-0.3s">
-        <h3 class="text-md font-semibold text-gray-500">Total Mahasiswa</h3>
-        <p class="text-4xl font-bold text-purple-600 mt-2">21</p>
-      </div>
-      <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center hover:scale-105 hover:shadow-pink-300/60 transition-all duration-500 animate__animated animate__fadeInUp animate__delay-0.6s">
-        <h3 class="text-md font-semibold text-gray-500">Total PIC</h3>
-        <p class="text-4xl font-bold text-pink-600 mt-2">15</p>
-      </div>
-    </div>
-
     <!-- Pengumuman -->
     <div class="w-full mb-10">
       <div class="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-5 rounded-xl shadow-md animate__animated animate__zoomIn">
@@ -57,6 +41,22 @@
         <p class="text-sm mt-1">Terima kasih telah mendukung kelancaran program magang. Semoga aktivitas hari ini berjalan lancar dan penuh manfaat.</p>
       </div>
     </div>
+
+    <!-- Dashboard Statistik -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
+    <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center">
+      <h3 class="text-md font-semibold text-gray-500">Total Siswa</h3>
+      <p class="text-4xl font-bold text-blue-600 mt-2">{{ $totalSiswa }}</p>
+    </div>
+    <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center">
+      <h3 class="text-md font-semibold text-gray-500">Total Mahasiswa</h3>
+      <p class="text-4xl font-bold text-purple-600 mt-2">{{ $totalMahasiswa }}</p>
+    </div>
+    <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center">
+      <h3 class="text-md font-semibold text-gray-500">Total PIC</h3>
+      <p class="text-4xl font-bold text-pink-600 mt-2">{{ $totalPic }}</p>
+    </div>
+  </div>
 
     <!-- Main Admin Features -->
     <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 w-full max-w-6xl mx-auto">
@@ -72,7 +72,7 @@
       <!-- Monitoring Peserta -->
       <a href="/monitoring" class="block">
         <div class="bg-white shadow-xl rounded-2xl p-8 hover:scale-105 hover:shadow-purple-300/60 transition-all duration-500 flex justify-between items-center min-h-[160px] animate__animated animate__fadeInUp animate__delay-0.3s">
-          <h2 class="text-xl font-semibold text-gray-700">Monitoring Peserta Magang</h2>
+          <h2 class="text-xl font-semibold text-gray-700">Penempatan Unit & Monitoring Peserta</h2>
           <img src="/images/mpm.png" alt="Monitoring" class="h-20 opacity-40 float">
         </div>
       </a>

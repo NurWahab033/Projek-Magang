@@ -48,7 +48,7 @@
       <a href="/verifikasi" class="navbar-link">Verifikasi Peserta Magang</a>
     </div>
     <div class="navbar-right">
-      <a href="/monitoring" class="navbar-link">Monitoring Peserta Magang</a>
+      <a href="/monitoring" class="navbar-link">Penempatan Unit & Monitoring Peserta</a>
       <a href="/detailakun" class="navbar-link">Pendaftaran Akun Peserta & PIC</a>
       <a href="/sertifikasi" class="navbar-link">Sertifikasi Peserta Magang</a>
       <a href="/admin" class="navbar-link">Kembali</a>

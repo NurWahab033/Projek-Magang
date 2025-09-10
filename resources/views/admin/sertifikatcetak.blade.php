@@ -12,7 +12,9 @@
 <body>
 
 <div class="container">
-    <a class="back-btn" href="{{ route('sertifikat.index') }}">Kembali</a>
+    {{-- <a class="back-btn" href="{{ route('sertifikat.index') }}">Kembali</a> --}}
+    <a href="javascript:void(0)" onclick="window.close();" class="back-btn">Kembali</a>
+
     <button class="btn-print" onclick="window.print()">Cetak Sertifikat</button>
 
     <!-- Halaman Depan -->
@@ -114,7 +116,7 @@
             </div>
             <div id="qrcode" style="width: 150px; height: 150px; margin-bottom: 5px;"></div>
             <div style="text-align: right;">
-                <strong>namapic</strong><br>
+                <p>{{ $sertifikat->penilaian?->pic?->username ?? '-' }}</p>
             </div>
         </div>
     </div>
@@ -123,7 +125,7 @@
 <!-- Script QR Code -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-  let qrText = "Sertifikat {{ $sertifikat->nomor_sertifikat ?? '-' }} - {{ $sertifikat->formulir->nama_lengkap }}";
+  let qrText = "{{ $sertifikat->penilaian?->pic?->username ?? '-' }}-{{ $sertifikat->penilaian?->pic?->nama_institusi ?? '-' }} ({{ \Carbon\Carbon::parse($sertifikat->formulir->tanggal_mulai_magang)->translatedFormat('d F Y') }} s/d {{ \Carbon\Carbon::parse($sertifikat->formulir->tanggal_selesai_magang)->translatedFormat('d F Y') }})";
   new QRCode(document.getElementById("qrcode"), {
     text: qrText,
     width: 150,
